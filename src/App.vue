@@ -6,13 +6,24 @@
       Total Students: {{ totalStudents.toLocaleString() }} &nbsp; | &nbsp;
       Total Faculty: {{ totalFaculty.toLocaleString() }}
     </p>
-    <InteractiveGlobe :points="points" />
+
+    <!-- 🔹 New split container -->
+    <div class="content-split">
+      <div class="globe-section">
+        <InteractiveGlobe :points="points" />
+      </div>
+
+      <div class="video-section">
+        <VideoCarousel />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import InteractiveGlobe from './components/InteractiveGlobe.vue';
+import VideoCarousel from "@/components/VideoCarousel.vue";
 
 const points = [
   // ----------------- 🇰🇪 Kenya -----------------
@@ -526,4 +537,44 @@ const totalFaculty = computed(() =>
   font-family: sans-serif;
   font-size: 16px;
 }
+.content-split {
+  display: flex;
+  flex-wrap: wrap; /* Responsive on smaller screens */
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+/* Left side: the globe */
+.globe-section {
+  flex: 1 1 50%;
+  min-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Right side: the video carousel */
+.video-section {
+  flex: 1 1 40%;
+  min-width: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Optional adjustments for smaller screens */
+@media (max-width: 900px) {
+  .content-split {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .globe-section,
+  .video-section {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
 </style>

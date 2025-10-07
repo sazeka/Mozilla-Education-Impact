@@ -71,12 +71,14 @@ function handlePointClick(point, event) {
 <style scoped>
 .globe-container {
   width: 100%;
-  height: 100vh;
-  background: black;
-  position: relative;
-  overflow: hidden;
+  max-width: 600px;         /* Control globe size */
+  height: 500px;
+  margin: 0 auto 0 0;       /* 👈 Push globe toward the left edge */
+  display: flex;
+  justify-content: center;  /* Center canvas horizontally within the section */
+  align-items: center;      /* Center vertically inside section */
+  position: relative;       /* Replace absolute/fixed positioning if used before */
 }
-
 .info-card {
   position: fixed;
   background: white;
