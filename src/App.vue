@@ -24,7 +24,7 @@ const points = [
     students: 194,
     faculty: 24,
     category: "Responsible Computing Challenge",
-    leadPI: "Dr George Musumba"
+    leadPI: "Dr George Musumba",
     projectTitle: "Mainstreaming Ethics Risk in Computer Programming"
   },
   {
@@ -48,6 +48,7 @@ const points = [
     category: "Responsible Computing Challenge",
     leadPI: "Dr Mary Mwadulo",
     projectTitle: "Student Team Dynamics"
+  },
   {
     name: "Kirinyaga University",
     lat: -0.6238,
@@ -270,224 +271,227 @@ const points = [
   lat: 40.7209,
   lng: -73.6524,
   description: "Private university in New York.",
-  students: 7500,
-  faculty: 500
+  students: 40,
+  faculty: 500,
+  category: "Responsible Computing Challenge",
+  leadPI: "Dr Suraj Uttamchandani",
+  projectTitle: "Spatial Justice as a Bridge to Responsible Computing"
 },
 {
   name: "Allegheny College",
   lat: 41.6484,
   lng: -80.1468,
   description: "Private liberal arts college in Pennsylvania.",
-  students: 1800,
-  faculty: 150
+  students: 751,
+  faculty: 55
 },
 {
   name: "Bemidji State University",
   lat: 47.4724,
   lng: -94.8805,
   description: "Public university in Minnesota.",
-  students: 5200,
-  faculty: 300
+  students: 1815,
+  faculty: 2
 },
 {
   name: "Bowdoin College",
   lat: 43.9024,
   lng: -69.9646,
   description: "Highly ranked liberal arts college in Maine.",
-  students: 1800,
-  faculty: 200
+  students: 464,
+  faculty: 2
 },
 {
   name: "Bucknell University",
   lat: 40.9542,
   lng: -76.8850,
   description: "Private university in Pennsylvania.",
-  students: 3700,
-  faculty: 350
+  students: 325,
+  faculty: 6
 },
 {
   name: "Columbia University In The City Of New York",
   lat: 40.8075,
   lng: -73.9626,
   description: "Ivy League university in NYC.",
-  students: 33000,
-  faculty: 4200
+  students: 1040,
+  faculty: 28
 },
 {
   name: "Georgetown University",
   lat: 38.9076,
   lng: -77.0723,
   description: "Prestigious university in Washington, D.C.",
-  students: 19000,
-  faculty: 2000
+  students: 387,
+  faculty: 20
 },
 {
   name: "Georgia Institute of Technology",
   lat: 33.7756,
   lng: -84.3963,
   description: "Top-ranked tech university in Georgia.",
-  students: 44000,
-  faculty: 1800
+  students: 600,
+  faculty: 6
 },
 {
   name: "Harvard College",
   lat: 42.3770,
   lng: -71.1167,
   description: "Oldest university in the US, in Massachusetts.",
-  students: 22000,
-  faculty: 2400
+  students: 5811,
+  faculty: 9
 },
 {
   name: "Howard University",
   lat: 38.9226,
   lng: -77.0190,
   description: "Historic HBCU in Washington, D.C.",
-  students: 10000,
-  faculty: 800
+  students: 154,
+  faculty: 5
 },
 {
   name: "Miami Dade College",
   lat: 25.7776,
   lng: -80.1918,
   description: "Large public college in Florida.",
-  students: 50000,
-  faculty: 1500
+  students: 760,
+  faculty: 1
 },
 {
   name: "Michigan State University",
   lat: 42.7018,
   lng: -84.4822,
   description: "Public research university in Michigan.",
-  students: 50000,
-  faculty: 2300
+  students: 79,
+  faculty: 4
 },
 {
   name: "Northeastern University",
   lat: 42.3398,
   lng: -71.0892,
   description: "Private research university in Massachusetts.",
-  students: 30000,
-  faculty: 1500
+  students: 10145,
+  faculty: 21
 },
 {
   name: "Prairie View A&M University",
   lat: 30.0955,
   lng: -95.9860,
   description: "Historically Black university in Texas.",
-  students: 9000,
-  faculty: 600
+  students: 140,
+  faculty: 6
 },
 {
   name: "San José State University",
   lat: 37.3352,
   lng: -121.8811,
   description: "Public university in Silicon Valley.",
-  students: 35000,
-  faculty: 2000
+  students: 1300,
+  faculty: 8
 },
 {
   name: "Santa Clara University",
   lat: 37.3496,
   lng: -121.9390,
   description: "Private Jesuit university in California.",
-  students: 8000,
-  faculty: 800
+  students: 600,
+  faculty: 1
 },
 {
   name: "Stillman College",
   lat: 33.2042,
   lng: -87.5795,
   description: "HBCU in Alabama.",
-  students: 700,
-  faculty: 80
+  students: 3425,
+  faculty: 5
 },
 {
   name: "University at Buffalo",
   lat: 43.0008,
   lng: -78.7870,
   description: "Part of the SUNY system in New York.",
-  students: 32000,
-  faculty: 1500
+  students: 3398,
+  faculty: 21
 },
 {
   name: "UC Berkeley",
   lat: 37.8719,
   lng: -122.2585,
   description: "Top public university in California.",
-  students: 42000,
-  faculty: 2200
+  students: 20550,
+  faculty: 42
 },
 {
   name: "UC Davis",
   lat: 38.5382,
   lng: -121.7617,
   description: "UC system school near Sacramento.",
-  students: 39000,
-  faculty: 2000
+  students: 125,
+  faculty: 1
 },
 {
   name: "University of Colorado",
   lat: 40.0076,
   lng: -105.2659,
   description: "Public research university in Boulder.",
-  students: 36000,
-  faculty: 2100
+  students: 1000,
+  faculty: 7
 },
 {
   name: "University of Maryland, Baltimore County",
   lat: 39.2557,
   lng: -76.7116,
   description: "UMBC is a public university in Maryland.",
-  students: 14000,
-  faculty: 900
+  students: 240,
+  faculty: 1
 },
 {
   name: "University of Michigan",
   lat: 42.2780,
   lng: -83.7382,
   description: "Top public university in Michigan.",
-  students: 48000,
-  faculty: 3000
+  students: 51,
+  faculty: 6
 },
 {
   name: "University of Notre Dame",
   lat: 41.7034,
   lng: -86.2386,
   description: "Private Catholic research university in Indiana.",
-  students: 12000,
-  faculty: 1300
+  students: 100,
+  faculty: 11
 },
 {
   name: "University of Pennsylvania",
   lat: 39.9522,
   lng: -75.1932,
   description: "Ivy League university in Philadelphia.",
-  students: 28000,
-  faculty: 2400
+  students: 172,
+  faculty: 4
 },
 {
   name: "University of Utah",
   lat: 40.7608,
   lng: -111.8910,
   description: "Public university in Salt Lake City.",
-  students: 34000,
-  faculty: 1700
+  students: 1800,
+  faculty: 8
 },
 {
   name: "University of Washington",
   lat: 47.6553,
   lng: -122.3035,
   description: "Large public research university in Seattle.",
-  students: 48000,
-  faculty: 2900
+  students: 704,
+  faculty: 82
 },
 {
   name: "Winston-Salem State University",
   lat: 36.0896,
   lng: -80.2264,
   description: "HBCU in North Carolina.",
-  students: 5100,
-  faculty: 400
+  students: 160,
+  faculty: 11
 }
 
 
