@@ -91,72 +91,72 @@ const points = [
     lat: 9.6027,
     lng: 76.9935,
     description: "Autonomous college in Kerala, India.",
-    students: 1200,
-    faculty: 100
+    students: 217,
+    faculty: 7
   },
   {
     name: "IIT Indore",
     lat: 22.5215,
     lng: 75.9235,
     description: "Indian Institute of Technology in Indore.",
-    students: 1700,
-    faculty: 200
+    students: 12,
+    faculty: 1
   },
   {
     name: "Ashoka University",
     lat: 28.9405,
     lng: 77.6368,
     description: "Private liberal arts university in Haryana.",
-    students: 2500,
-    faculty: 180
+    students: 165,
+    faculty: 3
   },
   {
     name: "IIT Guwahati",
     lat: 26.1878,
     lng: 91.6911,
     description: "Leading IIT in Assam, India.",
-    students: 6000,
-    faculty: 450
+    students: 0,
+    faculty: 4
   },
   {
     name: "Shri Vile Parle Kelavani Mandal’s Dwarkadas J. Sanghvi College of Engineering",
     lat: 19.1034,
     lng: 72.8366,
     description: "Private engineering college in Mumbai.",
-    students: 3000,
-    faculty: 200
+    students: 179,
+    faculty: 5
   },
   {
     name: "NIT Warangal",
     lat: 17.9784,
     lng: 79.5941,
     description: "National Institute of Technology in Telangana.",
-    students: 5000,
-    faculty: 400
+    students: 180,
+    faculty: 3
   },
   {
     name: "IIIT Kottayam",
     lat: 9.6431,
     lng: 76.7798,
     description: "Indian Institute of Information Technology in Kerala.",
-    students: 1000,
-    faculty: 80
+    students: 117,
+    faculty: 5
   },
   {
     name: "CHRIST (Deemed to be University)",
     lat: 12.9352,
     lng: 77.6068,
     description: "Major private university in Bengaluru.",
-    students: 20000,
-    faculty: 1000
+    students: 450,
+    faculty: 7
   },
   {
     name: "Kerala University of Digital Sciences, Innovation and Technology",
     lat: 8.5560,
     lng: 76.8812,
     description: "New digital university in Kerala.",
-    students: 800,
-    faculty: 60
+    students: 0,
+    faculty: 4
   },
   // ----------------- 🇿🇦 South Africa -----------------
 {
