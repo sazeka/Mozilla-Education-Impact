@@ -21,8 +21,8 @@ const points = [
     lat: -0.3956,
     lng: 36.9570,
     description: "Located in Nyeri, Kenya.",
-    students: 8000,
-    faculty: 450,
+    students: 194,
+    faculty: 24,
     category: "Responsible Computing Challenge"
   },
   {
@@ -30,8 +30,8 @@ const points = [
     lat: -1.2798,
     lng: 36.8172,
     description: "Largest university in Kenya.",
-    students: 48000,
-    faculty: 1600,
+    students: 166,
+    faculty: 2,
     category: "Education Hub"
 
   },
@@ -40,8 +40,8 @@ const points = [
     lat: 0.1046,
     lng: 37.6528,
     description: "Public university in Meru County.",
-    students: 7000,
-    faculty: 300,
+    students: 563,
+    faculty: 6,
     category: "Compute"
   },
   {
@@ -49,40 +49,40 @@ const points = [
     lat: -0.6238,
     lng: 37.3281,
     description: "Public university in Central Kenya.",
-    students: 6000,
-    faculty: 250
+    students: 209,
+    faculty: 11
   },
   {
     name: "University of Embu",
     lat: -0.5303,
     lng: 37.4575,
     description: "Growing institution in Embu.",
-    students: 4000,
-    faculty: 180
+    students: 100,
+    faculty: 9
   },
   {
     name: "Riara University",
     lat: -1.3027,
     lng: 36.7848,
     description: "Private university in Nairobi.",
-    students: 2000,
-    faculty: 100
+    students: 188,
+    faculty: 9
   },
   {
     name: "Jomo Kenyatta University of Agriculture and Technology",
     lat: -1.1012,
     lng: 37.0120,
     description: "Tech-focused university in Juja.",
-    students: 35000,
-    faculty: 1200
+    students: 112,
+    faculty: 6
   },
   {
     name: "Kisii University",
     lat: -0.6817,
     lng: 34.7652,
     description: "Public university in Kisii County.",
-    students: 10000,
-    faculty: 500
+    students: 215,
+    faculty: 8
   },
 
   // ----------------- 🇮🇳 India -----------------
