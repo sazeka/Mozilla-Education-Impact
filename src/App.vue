@@ -24,8 +24,8 @@ const points = [
     students: 194,
     faculty: 24,
     category: "Responsible Computing Challenge",
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    leadPI: "Dr George Musumba"
+    projectTitle: "Mainstreaming Ethics Risk in Computer Programming"
   },
   {
     name: "The University of Nairobi",
@@ -34,9 +34,9 @@ const points = [
     description: "Largest university in Kenya.",
     students: 166,
     faculty: 2,
-    category: "Education Hub",
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    category: "Responsible Computing Challenge",
+    leadPI: "Dr Elisha Abade",
+    projectTitle: "BESTe-CS: Blending Ethics, Society and Technology through Computer Science"
   },
   {
     name: "Meru University",
@@ -45,10 +45,9 @@ const points = [
     description: "Public university in Meru County.",
     students: 563,
     faculty: 6,
-    category: "Compute",
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
-  },
+    category: "Responsible Computing Challenge",
+    leadPI: "Dr Mary Mwadulo",
+    projectTitle: "Student Team Dynamics"
   {
     name: "Kirinyaga University",
     lat: -0.6238,
@@ -56,8 +55,9 @@ const points = [
     description: "Public university in Central Kenya.",
     students: 209,
     faculty: 11,
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    category: "Responsible Computing Challenge",
+    leadPI: "Dr Kennedy Malanga",
+    projectTitle: "Responsible Computing Animated"
   },
   {
     name: "University of Embu",
@@ -66,8 +66,9 @@ const points = [
     description: "Growing institution in Embu.",
     students: 100,
     faculty: 9,
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    category: "Responsible Computing Challenge",
+    leadPI: "Dr Victoria Mukami",
+    projectTitle: "Innovative multidisciplinary ethically informed student projects through critical and design thinking"
   },
   {
     name: "Riara University",
@@ -76,8 +77,9 @@ const points = [
     description: "Private university in Nairobi.",
     students: 188,
     faculty: 9,
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    category: "Responsible Computing Challenge",
+    leadPI: "Prof Felix Musau",
+    projectTitle: "RAPID Computing Using Problem-Based Learning Approach"
   },
   {
     name: "Jomo Kenyatta University of Agriculture and Technology",
@@ -86,8 +88,9 @@ const points = [
     description: "Tech-focused university in Juja.",
     students: 112,
     faculty: 6,
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    category: "Responsible Computing Challenge",
+    leadPI: "Dr Eunice Njeri",
+    projectTitle: "Teaching Responsible Computing using Robotics"
   },
   {
     name: "Kisii University",
@@ -96,8 +99,9 @@ const points = [
     description: "Public university in Kisii County.",
     students: 215,
     faculty: 8,
-    leadPI: "Lead PI Name Here",
-    projectTitle: "Project Title Here"
+    category: "Responsible Computing Challenge",
+    leadPI: "Dr Fredrick Awuor",
+    projectTitle: "Ethical AI"
   },
 
   // ----------------- 🇮🇳 India -----------------
