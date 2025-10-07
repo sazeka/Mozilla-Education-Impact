@@ -23,7 +23,9 @@ const points = [
     description: "Located in Nyeri, Kenya.",
     students: 194,
     faculty: 24,
-    category: "Responsible Computing Challenge"
+    category: "Responsible Computing Challenge",
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "The University of Nairobi",
@@ -32,8 +34,9 @@ const points = [
     description: "Largest university in Kenya.",
     students: 166,
     faculty: 2,
-    category: "Education Hub"
-
+    category: "Education Hub",
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "Meru University",
@@ -42,7 +45,9 @@ const points = [
     description: "Public university in Meru County.",
     students: 563,
     faculty: 6,
-    category: "Compute"
+    category: "Compute",
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "Kirinyaga University",
@@ -50,7 +55,9 @@ const points = [
     lng: 37.3281,
     description: "Public university in Central Kenya.",
     students: 209,
-    faculty: 11
+    faculty: 11,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "University of Embu",
@@ -58,7 +65,9 @@ const points = [
     lng: 37.4575,
     description: "Growing institution in Embu.",
     students: 100,
-    faculty: 9
+    faculty: 9,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "Riara University",
@@ -66,7 +75,9 @@ const points = [
     lng: 36.7848,
     description: "Private university in Nairobi.",
     students: 188,
-    faculty: 9
+    faculty: 9,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "Jomo Kenyatta University of Agriculture and Technology",
@@ -74,7 +85,9 @@ const points = [
     lng: 37.0120,
     description: "Tech-focused university in Juja.",
     students: 112,
-    faculty: 6
+    faculty: 6,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
   {
     name: "Kisii University",
@@ -82,7 +95,31 @@ const points = [
     lng: 34.7652,
     description: "Public university in Kisii County.",
     students: 215,
-    faculty: 8
+    faculty: 8,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
+  },
+
+  // ----------------- 🇮🇳 India -----------------
+  {
+    name: "Marian College Kuttikkanam Autonomous",
+    lat: 9.6027,
+    lng: 76.9935,
+    description: "Autonomous college in Kerala, India.",
+    students: 217,
+    faculty: 7,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
+  },
+  {
+    name: "IIT Indore",
+    lat: 22.5215,
+    lng: 75.9235,
+    description: "Indian Institute of Technology in Indore.",
+    students: 12,
+    faculty: 1,
+    leadPI: "Lead PI Name Here",
+    projectTitle: "Project Title Here"
   },
 
   // ----------------- 🇮🇳 India -----------------
@@ -163,65 +200,65 @@ const points = [
   name: "University of Cape Town",
   lat: -33.9570,
   lng: 18.4607,
-  description: "Top-ranked university in South Africa.",
-  students: 29000,
-  faculty: 1300
+  description: "Embedding conceptual tools for ethical engagement in technical engineering content",
+  students: 0,
+  faculty: 0
 },
 {
   name: "University of Witwatersrand",
   lat: -26.1929,
   lng: 28.0300,
   description: "Leading research university in Johannesburg.",
-  students: 40000,
-  faculty: 1500
+  students: 0,
+  faculty: 0
 },
 {
   name: "University of the Western Cape",
   lat: -33.9321,
   lng: 18.6323,
   description: "Public university in Bellville.",
-  students: 23000,
-  faculty: 1200
+  students: 0,
+  faculty: 0
 },
 {
   name: "Central University of Technology, Free State",
   lat: -29.1183,
   lng: 26.2140,
   description: "Tech university in Bloemfontein.",
-  students: 21000,
-  faculty: 900
+  students: 0,
+  faculty: 0
 },
 {
   name: "University of Pretoria",
   lat: -25.7545,
   lng: 28.2314,
   description: "One of the largest universities in South Africa.",
-  students: 53000,
-  faculty: 2000
+  students: 0,
+  faculty: 0
 },
 {
   name: "University of Fort Hare",
   lat: -32.7869,
   lng: 26.8336,
   description: "Historic institution in Alice.",
-  students: 16000,
-  faculty: 700
+  students: 0,
+  faculty: 0
 },
 {
   name: "Durban University of Technology",
   lat: -29.8532,
   lng: 30.9257,
   description: "Multicampus university in Durban.",
-  students: 33000,
-  faculty: 1200
+  students: 0,
+  faculty: 0
 },
 {
   name: "Sol Plaatje University",
   lat: -28.7382,
   lng: 24.7636,
   description: "New public university in Kimberley.",
-  students: 6000,
-  faculty: 300
+  students: 0,
+  faculty: 0
 },
 // ----------------- 🇺🇸 United States -----------------
 {
@@ -448,7 +485,6 @@ const points = [
   students: 5100,
   faculty: 400
 }
-
 
 
 ];

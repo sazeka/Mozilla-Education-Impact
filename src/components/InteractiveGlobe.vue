@@ -4,7 +4,13 @@
   <div v-if="activePoint" class="info-card" :style="cardStyle">
     <h3>{{ activePoint.name }}</h3>
     <p>{{ activePoint.description }}</p>
+      <!-- Lead PI and Project Title -->
+    <div v-if="activePoint.leadPI || activePoint.projectTitle" class="project-info">
+    <p><strong>Lead PI:</strong> {{ activePoint.leadPI ?? 'N/A' }}</p>
+    <p><strong>Project Title:</strong> {{ activePoint.projectTitle ?? 'N/A' }}</p>
+  </div>
     <div class="stats">
+      <!-- Students and Faculty -->
       <p><strong>Students:</strong> {{ activePoint.students?.toLocaleString() ?? 'N/A' }}</p>
       <p><strong>Faculty:</strong> {{ activePoint.faculty?.toLocaleString() ?? 'N/A' }}</p>
     </div>
