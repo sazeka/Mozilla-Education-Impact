@@ -517,10 +517,13 @@ const totalFaculty = computed(() =>
 );
 </script>
 
-<style scoped>
-:deep(body) {
+<style>
+body {
   background-color: #000;
   color: white;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
 }
 
 .page-title {
