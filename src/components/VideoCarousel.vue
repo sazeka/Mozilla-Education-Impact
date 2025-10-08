@@ -20,9 +20,11 @@ const galleryConfig = {
 const thumbnailsConfig = {
   height: 80,
   itemsToShow: 4,
-  wrapAround: true,
-  touchDrag: false,
+  wrapAround: false,    // ❌ no infinite loop
+  mouseDrag: true,      // ✅ allow user scrolling
+  touchDrag: true,
   gap: 10,
+  snapAlign: 'start',   // ensures thumbnails move smoothly
 }
 
 // Local video files (in /public/videos/)
