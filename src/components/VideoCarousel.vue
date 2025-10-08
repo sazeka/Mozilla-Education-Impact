@@ -25,12 +25,10 @@
 <script setup>
 import { ref } from "vue";
 
-const base = import.meta.env.BASE_URL;
-
 const videos = [
-  `${base}videos/clip1.mp4`,
-  `${base}videos/clip2.mp4`,
-  `${base}videos/clip3.mp4`
+  "videos/clip1.mp4",
+  "videos/clip2.mp4",
+  "videos/clip3.mp4",
 ];
 
 const currentIndex = ref(0);
@@ -42,8 +40,6 @@ function nextVideo() {
 function prevVideo() {
   currentIndex.value = (currentIndex.value - 1 + videos.length) % videos.length;
 }
-
-console.log("Resolved video paths:", videos);
 </script>
 
 
