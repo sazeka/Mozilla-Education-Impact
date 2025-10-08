@@ -80,9 +80,13 @@ function handlePointClick(point, event) {
   position: relative;       /* Replace absolute/fixed positioning if used before */
 }
 .info-card {
-  background-color: #111;   /* ✅ dark card background */
-  color: #fff;              /* white text for readability */
-  border: 1px solid #333;   /* subtle outline */
+  position: absolute;        /* ✅ ensures it appears over the globe */
+  top: 20px;                 /* or dynamic positioning in your code */
+  left: 20px;
+  z-index: 10;               /* ✅ keep it above the canvas */
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #333;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
@@ -91,8 +95,11 @@ function handlePointClick(point, event) {
 
 .stats {
   margin-top: 0.5em;
-  background: #f0f0f0;
+  background: #222;         /* darker gray background */
+  color: #fff;              /* keep text white */
   padding: 0.5em;
   border-radius: 6px;
+  border: 1px solid #444;   /* subtle outline for separation */
 }
+
 </style>
