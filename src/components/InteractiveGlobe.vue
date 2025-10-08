@@ -70,16 +70,14 @@ function handlePointClick(point, event) {
 
 <style scoped>
 .globe-container {
+  position: relative;
   width: 100%;
-  max-width: 600px;         /* Control globe size */
+  max-width: 600px;
   height: 500px;
-  margin: 0 auto 0 0;       /* 👈 Push globe toward the left edge */
-  display: flex;
-  justify-content: center;  /* Center canvas horizontally within the section */
-  align-items: center;      /* Center vertically inside section */
-  position: absolute;       /* Replace absolute/fixed positioning if used before */
-  z-index: 2;             /* Ensure globe is above background but below info cards */
+  z-index: 10; /* ⬆️ raise above everything else */
+  overflow: visible;
 }
+
 .info-card {
   position: absolute;        /* ✅ ensures it appears over the globe */
   top: 20px;                 /* or dynamic positioning in your code */

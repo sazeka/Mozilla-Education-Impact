@@ -562,9 +562,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;      /* ✅ make z-index work */
-  z-index: 2;              /* ✅ keeps globe above carousel background */
-  overflow: visible;       /* ✅ allow pop-up cards to show */
+  position: relative;
+  z-index: 10; /* ⬆️ ensures the WebGL canvas is on top */
 }
 
 /* Right side: the video carousel */
@@ -575,7 +574,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  z-index: 1;              /* ✅ keep under globe if they overlap */
+  z-index: 1; /* 👇 keep carousel below the globe */
 }
 
 /* Responsive layout */

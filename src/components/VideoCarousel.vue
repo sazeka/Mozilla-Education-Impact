@@ -82,6 +82,8 @@ const videos = [
   padding: 10px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  position: relative;
+  z-index: 0; /* ⬇️ keep it under the globe */
 }
 
 /* 🎥 Main gallery */
