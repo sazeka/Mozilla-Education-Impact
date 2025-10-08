@@ -1,99 +1,121 @@
-<template>
-  <div class="video-carousel">
-    <div
-      class="carousel-track"
-      :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
-    >
-      <div v-for="(video, index) in videos" :key="index" class="carousel-item">
-        <video
-          :src="video"
-          controls
-          muted
-          loop
-          playsinline
-          class="carousel-video"
-        ></video>
-      </div>
-    </div>
-
-    <div class="carousel-controls" v-if="videos.length > 1">
-      <button @click="prevVideo">‹</button>
-      <button @click="nextVideo">›</button>
-    </div>
-  </div>
-</template>
 <script setup>
-import { ref } from "vue";
+import 'vue3-carousel/carousel.css'
+import { Carousel, Slide, Navigation } from 'vue3-carousel'
+import { ref } from 'vue'
 
+const currentSlide = ref(0)
+const slideTo = (nextSlide) => (currentSlide.value = nextSlide)
+
+// 🎥 Main video carousel config
+const galleryConfig = {
+  itemsToShow: 1,
+  wrapAround: true,
+  slideEffect: 'fade',
+  mouseDrag: false,
+  touchDrag: false,
+  height: 420,
+}
+
+// 🎞️ Thumbnail carousel config
+const thumbnailsConfig = {
+  height: 80,
+  itemsToShow: 4,
+  wrapAround: true,
+  touchDrag: false,
+  gap: 10,
+}
+
+// Local video files (in /public/videos/)
 const videos = [
-  "videos/clip1.mp4",
-  "videos/clip2.mp4",
-  "videos/clip3.mp4",
-];
-
-const currentIndex = ref(0);
-
-function nextVideo() {
-  currentIndex.value = (currentIndex.value + 1) % videos.length;
-}
-
-function prevVideo() {
-  currentIndex.value = (currentIndex.value - 1 + videos.length) % videos.length;
-}
+  { id: 1, url: 'videos/clip1.mp4', thumbnail: 'videos/thumb1.png' },
+  { id: 2, url: 'videos/clip2.mp4', thumbnail: 'videos/thumb2.png' },
+]
 </script>
 
+<template>
+  <div class="video-carousel">
+    <!-- 🎥 Main video gallery -->
+    <Carousel id="gallery" v-bind="galleryConfig" v-model="currentSlide">
+      <Slide v-for="video in videos" :key="video.id">
+        <video controls playsinline class="gallery-video" :src="video.url"></video>
+      </Slide>
+    </Carousel>
+
+    <!-- 🎞️ Thumbnail gallery -->
+    <Carousel id="thumbnails" v-bind="thumbnailsConfig" v-model="currentSlide">
+      <Slide v-for="video in videos" :key="video.id">
+        <template #default="{ currentIndex, isActive }">
+          <div
+            :class="['thumbnail', { 'is-active': isActive }]"
+            @click="slideTo(currentIndex)"
+          >
+            <img :src="video.thumbnail" alt="Thumbnail" class="thumbnail-image" />
+          </div>
+        </template>
+      </Slide>
+
+      <template #addons>
+        <Navigation />
+      </template>
+    </Carousel>
+  </div>
+</template>
+
 <style scoped>
+:root {
+  background-color: #000;
+}
+
+/* Make both carousels stack vertically */
 .video-carousel {
-  width: 100%;
-  max-width: 800px;
-  margin: 20px auto;
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  background-color: #000; /* ✅ black background */
-}
-
-.carousel-track {
   display: flex;
-  transition: transform 0.6s ease;
-  background-color: #000; /* keep inside slides black */
+  flex-direction: column; /* ✅ stack vertically */
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #000;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-.carousel-item {
-  min-width: 100%;
-  box-sizing: border-box;
-  background-color: #000; /* each slide background black */
+/* 🎥 Main gallery */
+#gallery {
+  display: block;
+  width: 100%;
 }
 
-.carousel-video {
+.gallery-video {
   width: 100%;
   height: auto;
   border-radius: 12px;
-  background-color: #000; /* fill behind video */
+  background: #000;
+  object-fit: contain;
 }
 
-.carousel-controls {
-  position: absolute;
-  top: 50%;
+/* 🎞️ Thumbnail row */
+#thumbnails {
+  margin-top: 12px;
+  display: block;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
 }
 
-.carousel-controls button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: none;
-  font-size: 2rem;
-  padding: 0 12px;
-  border-radius: 50%;
+.thumbnail {
   cursor: pointer;
-  transition: background 0.3s;
+  opacity: 0.6;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.carousel-controls button:hover {
-  background: rgba(255, 255, 255, 0.5);
+.thumbnail.is-active,
+.thumbnail:hover {
+  opacity: 1;
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
 }
 </style>
-
