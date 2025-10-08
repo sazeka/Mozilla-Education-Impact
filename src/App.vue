@@ -561,9 +561,6 @@ body {
   min-width: 400px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 10; /* ⬆️ ensures the WebGL canvas is on top */
 }
 
 /* Right side: the video carousel */
@@ -573,8 +570,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  z-index: 1; /* 👇 keep carousel below the globe */
 }
 
 /* Responsive layout */
