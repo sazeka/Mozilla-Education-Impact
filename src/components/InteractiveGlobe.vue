@@ -77,7 +77,8 @@ function handlePointClick(point, event) {
   display: flex;
   justify-content: center;  /* Center canvas horizontally within the section */
   align-items: center;      /* Center vertically inside section */
-  position: relative;       /* Replace absolute/fixed positioning if used before */
+  position: absolute;       /* Replace absolute/fixed positioning if used before */
+  z-index: 2;             /* Ensure globe is above background but below info cards */
 }
 .info-card {
   position: absolute;        /* ✅ ensures it appears over the globe */

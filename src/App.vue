@@ -561,6 +561,10 @@ body {
   min-width: 400px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;      /* ✅ make z-index work */
+  z-index: 2;              /* ✅ keeps globe above carousel background */
+  overflow: visible;       /* ✅ allow pop-up cards to show */
 }
 
 /* Right side: the video carousel */
@@ -570,6 +574,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 1;              /* ✅ keep under globe if they overlap */
 }
 
 /* Responsive layout */
