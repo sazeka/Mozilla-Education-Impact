@@ -29,6 +29,8 @@ const thumbnailsConfig = {
 const videos = [
   { id: 1, url: 'videos/clip1.mp4', thumbnail: 'videos/thumb1.png' },
   { id: 2, url: 'videos/clip2.mp4', thumbnail: 'videos/thumb2.png' },
+  { id: 3, url: 'videos/clip3.mp4', thumbnail: 'videos/thumb3.png' },
+  { id: 4, url: 'videos/clip4.mp4', thumbnail: 'videos/thumb4.png' },
 ]
 </script>
 
