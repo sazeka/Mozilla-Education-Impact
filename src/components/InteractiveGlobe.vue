@@ -80,13 +80,13 @@ function handlePointClick(point, event) {
   position: relative;       /* Replace absolute/fixed positioning if used before */
 }
 .info-card {
-  position: fixed;
-  background: white;
-  padding: 1em;
-  border-radius: 8px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-  z-index: 10;
-  min-width: 220px;
+  background-color: #111;   /* ✅ dark card background */
+  color: #fff;              /* white text for readability */
+  border: 1px solid #333;   /* subtle outline */
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  max-width: 300px;
 }
 
 .stats {
