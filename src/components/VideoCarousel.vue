@@ -42,7 +42,6 @@ function prevVideo() {
 }
 </script>
 
-
 <style scoped>
 .video-carousel {
   width: 100%;
@@ -51,22 +50,26 @@ function prevVideo() {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
+  background-color: #000; /* ✅ black background */
 }
 
 .carousel-track {
   display: flex;
   transition: transform 0.6s ease;
+  background-color: #000; /* keep inside slides black */
 }
 
 .carousel-item {
   min-width: 100%;
   box-sizing: border-box;
+  background-color: #000; /* each slide background black */
 }
 
 .carousel-video {
   width: 100%;
   height: auto;
   border-radius: 12px;
+  background-color: #000; /* fill behind video */
 }
 
 .carousel-controls {
@@ -79,12 +82,18 @@ function prevVideo() {
 }
 
 .carousel-controls button {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
   font-size: 2rem;
   padding: 0 12px;
   border-radius: 50%;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+.carousel-controls button:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 </style>
+
