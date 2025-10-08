@@ -518,6 +518,11 @@ const totalFaculty = computed(() =>
 </script>
 
 <style scoped>
+:deep(body) {
+  background-color: #000;
+  color: white;
+}
+
 .page-title {
   position: absolute;
   top: 20px;
@@ -537,9 +542,10 @@ const totalFaculty = computed(() =>
   font-family: sans-serif;
   font-size: 16px;
 }
+
 .content-split {
   display: flex;
-  flex-wrap: wrap; /* Responsive on smaller screens */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
@@ -563,7 +569,7 @@ const totalFaculty = computed(() =>
   align-items: center;
 }
 
-/* Optional adjustments for smaller screens */
+/* Responsive layout */
 @media (max-width: 900px) {
   .content-split {
     flex-direction: column;
@@ -576,5 +582,5 @@ const totalFaculty = computed(() =>
     max-width: 100%;
   }
 }
-
 </style>
+
