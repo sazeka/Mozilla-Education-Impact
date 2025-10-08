@@ -548,46 +548,43 @@ body {
 
 .content-split {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  margin-top: 30px;
+  flex-direction: row;         /* horizontal layout */
+  align-items: center;         /* vertically centers both */
+  justify-content: space-between;
+  margin-top: 140px;           /* keeps both below title & totals */
+  width: 100%;
+  gap: 40px;                   /* space between globe & video */
+  padding: 0 40px;
 }
 
-/* Left side: the globe */
 .globe-section {
   flex: 1 1 50%;
-  min-width: 400px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center;     /* centers globe horizontally in its half */
+  align-items: center;         /* centers vertically */
+  height: 70vh;                /* adjust height for visual balance */
   position: relative;
-  z-index: 10; /* ⬆️ ensures the WebGL canvas is on top */
 }
 
-/* Right side: the video carousel */
 .video-section {
-  flex: 1 1 40%;
-  min-width: 350px;
+  flex: 1 1 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 70vh;
   position: relative;
-  z-index: 1; /* 👇 keep carousel below the globe */
 }
 
-/* Responsive layout */
+/* Mobile responsiveness */
 @media (max-width: 900px) {
   .content-split {
-    flex-direction: column;
+    flex-direction: column; /* stack only on small screens */
     align-items: center;
   }
 
   .globe-section,
   .video-section {
-    flex: 1 1 100%;
-    max-width: 100%;
+    width: 100%;
   }
 }
 </style>

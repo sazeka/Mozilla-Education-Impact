@@ -71,12 +71,16 @@ function handlePointClick(point, event) {
 <style scoped>
 .globe-container {
   position: relative;
-  width: 100%;
-  max-width: 600px;
-  height: 500px;
-  z-index: 10; /* ⬆️ raise above everything else */
-  overflow: visible;
+  margin-top: 100px; /* pushes it below the header/text */
+  width: 50vw;       /* stays on the left half */
+  height: calc(100vh - 100px); /* fills remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
 }
+
+
 
 .info-card {
   position: absolute;        /* ✅ ensures it appears over the globe */
