@@ -63,8 +63,8 @@ onMounted(async () => {
 
 function handlePointClick(point, event) {
   activePoint.value = point;
-  cardStyle.left = `${event.clientX + 10}px`;
-  cardStyle.top = `${event.clientY + 10}px`;
+  cardStyle.left = '50%';
+  cardStyle.top = '50%';
 }
 </script>
 
@@ -80,20 +80,21 @@ function handlePointClick(point, event) {
   float: left;
 }
 
-
-
 .info-card {
-  position: absolute;        /* ✅ ensures it appears over the globe */
-  top: 20px;                 /* or dynamic positioning in your code */
-  left: 20px;
-  z-index: 10;               /* ✅ keep it above the canvas */
-  background-color: #111;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: rgba(17, 17, 17, 0.95);
   color: #fff;
   border: 1px solid #333;
-  border-radius: 10px;
-  padding: 15px;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  max-width: 300px;
+  max-width: 320px;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
 .stats {
