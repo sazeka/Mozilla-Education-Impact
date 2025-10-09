@@ -1,30 +1,48 @@
 <template>
   <div>
-    <h1 class="page-title">Mozilla Education Impact</h1>
+    <!-- 🔹 Top row: Left info (title, filter, totals) + Right carousel -->
+    <div class="top-section">
+      <div class="left-info">
+        <h1 class="page-title">Mozilla Education Impact</h1>
 
-    <!-- 🔹 Category Filter (now between title & totals) -->
-    <div class="filter-bar">
-      <label for="category">Filter by Category:</label>
-      <select id="category" v-model="selectedCategory">
-        <option value="">All</option>
-        <option v-for="category in uniqueCategories" :key="category" :value="category">
-          {{ category }}
-        </option>
-      </select>
+        <div class="filter-bar">
+          <label for="category">Filter by Category:</label>
+          <select id="category" v-model="selectedCategory">
+            <option value="">All</option>
+            <option v-for="category in uniqueCategories" :key="category" :value="category">
+              {{ category }}
+            </option>
+          </select>
+        </div>
+
+        <p class="totals">
+          Total Universities: {{ filteredPoints.length }} &nbsp; | &nbsp;
+          Total Students: {{ totalStudents.toLocaleString() }} &nbsp; | &nbsp;
+          Total Faculty: {{ totalFaculty.toLocaleString() }}
+        </p>
+      </div>
+
+      <!-- 🔹 Carousel now aligned to the right of the entire left column -->
+      <div class="right-carousel">
+        <div class="carousel-track">
+          <div v-for="article in articles" :key="article.title" class="carousel-item">
+            <h3>{{ article.title }}</h3>
+            <p>{{ article.summary }}</p>
+            <a :href="article.link" target="_blank">Read more →</a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <p class="totals">
-      Total Universities: {{ filteredPoints.length }} &nbsp; | &nbsp;
-      Total Students: {{ totalStudents.toLocaleString() }} &nbsp; | &nbsp;
-      Total Faculty: {{ totalFaculty.toLocaleString() }}
-    </p>
-
+    <!-- 🔹 Globe + Video -->
     <div class="content-split">
       <div class="globe-section">
         <InteractiveGlobe :points="filteredPoints" />
       </div>
       <div class="video-section">
-        <VideoCarousel />
+        <div class="video-container">
+          <VideoCarousel />
+        </div>
       </div>
     </div>
   </div>
@@ -35,6 +53,26 @@ import { ref, computed } from 'vue';
 import InteractiveGlobe from './components/InteractiveGlobe.vue';
 import VideoCarousel from "@/components/VideoCarousel.vue";
 
+// Articles Data
+const articles = [
+  {
+    title: "Algorithmic Bias, Marketplaces, and Diversity Regulation",
+    summary: "Lance (Yong) Park (Howard University, RCC USA) Presenting paper at TPRC53 August 1, 2024.",
+    link: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4912069"
+  },
+  {
+    title: "Bridging Technology, Ethics and Rural Justice",
+    summary: "Marco Robinson (Prairie View A&M, RCC USA) Published article June 20, 2025.",
+    link: "https://www.pvamu.edu/research/post/bridging-technology-ethics-and-rural-justice-pvamu-team-receives-mozilla-funding/"
+  },
+  {
+    title: "Inclusive Computing Education",
+    summary: "Centering ethics, justice, and collaboration in CS classrooms.",
+    link: "https://example.com/inclusive-computing"
+  }
+];
+
+// University Pins Data
 const points = [
 // ----------------- UK -----------------
   {
@@ -661,63 +699,38 @@ body {
   font-family: sans-serif;
 }
 
-.page-title {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 5;
-  color: white;
-  font-size: 28px; /* slightly larger looks better */
-  line-height: 1.2; /* makes spacing predictable */
-}
-
-.content-split {
+/* 🔹 TOP SECTION */
+.top-section {
   display: flex;
-  flex-direction: row;         /* horizontal layout */
-  align-items: center;         /* vertically centers both */
   justify-content: space-between;
-  margin-top: 140px;           /* keeps both below title & totals */
-  width: 100%;
-  gap: 40px;                   /* space between globe & video */
-  padding: 0 40px;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 40px;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
 }
 
-.globe-section {
-  flex: 1 1 50%;
+/* Left info column */
+.left-info {
+  flex: 0 1 40%;
   display: flex;
-  justify-content: center;     /* centers globe horizontally in its half */
-  align-items: center;         /* centers vertically */
-  height: 70vh;                /* adjust height for visual balance */
-  position: relative;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.video-section {
-  flex: 1 1 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 70vh;
-  position: relative;
+.page-title {
+  font-size: 28px;
+  color: white;
+  margin: 0;
+  line-height: 1.2;
 }
 
 .filter-bar {
-  position: absolute;
-  top: 90px; 
-  left: 20px;
-  z-index: 5;
   display: flex;
   align-items: center;
   gap: 0.5em;
   font-size: 1rem;
-}
-
-.totals {
-  position: absolute;
-  top: 115px; /* ⬇️ gives clear separation below filter */
-  left: 20px;
-  z-index: 5;
-  color: white;
-  font-size: 16px;
+  flex-wrap: wrap;
 }
 
 .filter-bar select {
@@ -729,17 +742,153 @@ body {
   cursor: pointer;
 }
 
-/* Mobile responsiveness */
+.totals {
+  color: white;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Right column (Articles Carousel) */
+.right-carousel {
+  flex: 1 1 50%;
+  padding-left: 40px;        /* ✅ aligns left edge with video-section */
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+}
+
+.carousel-item {
+  flex: 0 0 250px;
+  scroll-snap-align: start;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 1rem;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-item h3 {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  color: #fff;
+}
+
+.carousel-item p {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-item a {
+  color: #EED800;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.carousel-item a:hover {
+  text-decoration: underline;
+}
+
+/* scrollbar styling */
+.carousel-track::-webkit-scrollbar {
+  height: 6px;
+}
+.carousel-track::-webkit-scrollbar-thumb {
+  background: #EED800;
+  border-radius: 4px;
+}
+
+/* 🔹 GLOBE + VIDEO */
+.content-split {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 20px;
+  width: 100%;
+  gap: 40px;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.globe-section {
+  flex: 1 1 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+
+/* Right video column */
+.video-section {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 40px;        /* ✅ same left padding as .right-carousel */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+
+.video-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+/* 🔹 RESPONSIVE */
 @media (max-width: 900px) {
-  .content-split {
-    flex-direction: column; /* stack only on small screens */
+  .top-section {
+    flex-direction: column;
     align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .left-info {
+    flex: 1 1 100%;
+    text-align: center;
+    align-items: center;
+  }
+
+  .right-carousel {
+    flex: 1 1 100%;
+  }
+
+  .carousel-item {
+    flex: 0 0 220px;
+  }
+
+  .content-split {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
   }
 
   .globe-section,
   .video-section {
     width: 100%;
+    height: auto;
+  }
+
+  .video-section {
+    padding-right: 0;
   }
 }
+
 </style>
 
