@@ -14,7 +14,7 @@
       <p><strong>Students:</strong> {{ activePoint.students?.toLocaleString() ?? 'N/A' }}</p>
       <p><strong>Faculty:</strong> {{ activePoint.faculty?.toLocaleString() ?? 'N/A' }}</p>
     </div>
-    <button @click="activePoint = null">Close</button>
+    <button class="close-btn" @click="activePoint = null">×</button>
   </div>
 </template>
 
@@ -104,6 +104,23 @@ function handlePointClick(point, event) {
   padding: 0.5em;
   border-radius: 6px;
   border: 1px solid #444;   /* subtle outline for separation */
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #EED800; /* subtle gold hover highlight */
 }
 
 </style>
