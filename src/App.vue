@@ -754,6 +754,8 @@ body {
   padding-left: 40px;        /* ✅ aligns left edge with video-section */
   overflow: hidden;
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 }
 
 .carousel-track {
@@ -812,7 +814,7 @@ body {
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: -30px;
   width: 100%;
   gap: 40px;
   padding: 0 40px;
@@ -825,6 +827,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 70vh;
+  position: relative;
+  z-index: 1;
 }
 
 
