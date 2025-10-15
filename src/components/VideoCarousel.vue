@@ -67,39 +67,47 @@ const videos = [
 
 <style scoped>
 :root {
-  background-color: #000;
+  background-color: #fff;
 }
 
-/* Make both carousels stack vertically */
+/* Stack carousels */
 .video-carousel {
   display: flex;
-  flex-direction: column; /* ✅ stack vertically */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   max-width: 800px;
   margin: 0 auto;
-  background: #000;
+  background: #fff;
   padding: 10px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-  position: relative;
+  box-shadow: none !important;        /* ✅ remove */
 }
 
-/* 🎥 Main gallery */
+/* Main gallery */
 #gallery {
   display: block;
   width: 100%;
 }
 
+/* If you added a wrapper like .video-frame earlier, kill its shadow too */
+.video-frame {
+  border-radius: 12px;
+  background: #fff;
+  padding: 0;
+  box-shadow: none !important;        /* ✅ remove */
+}
+
 .gallery-video {
   width: 100%;
   height: auto;
+  display: block;
   border-radius: 12px;
-  background: #000;
-  object-fit: contain;
+  background: #fff;
+  box-shadow: none !important;        /* ✅ remove */
 }
 
-/* 🎞️ Thumbnail row */
+/* Thumbnail row */
 #thumbnails {
   margin-top: 12px;
   display: block;
@@ -122,5 +130,18 @@ const videos = [
   height: 100%;
   border-radius: 8px;
   object-fit: cover;
+  background: #fff;
+  box-shadow: none !important;        /* ✅ remove */
 }
+
+/* Kill any shadows vue3-carousel might add internally */
+:deep(.carousel),
+:deep(.carousel__track),
+:deep(.carousel__slide),
+:deep(.carousel__viewport) {
+  box-shadow: none !important;        /* ✅ remove */
+  filter: none !important;            /* just in case drop-shadows are filters */
+}
+
+
 </style>

@@ -39,13 +39,15 @@ let countries = [];
 // 🌍 Setup globe
 onMounted(async () => {
   globe = Globe()(globeContainer.value)
-    .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .pointLat(d => d.lat)
     .pointLng(d => d.lng)
     .pointAltitude(0.05)
     .pointColor(() => '#F06C13')
     .pointsData(props.points)
     .onPointClick(handlePointClick);
+
+      globe.scene().background = new THREE.Color(0xffffff);
 
   // Load map data once
   const res = await fetch('https://unpkg.com/world-atlas/countries-110m.json');
@@ -135,13 +137,14 @@ function handlePointClick(point) {
 <style scoped>
 .globe-container {
   position: relative;
-  margin-top: 100px; /* pushes it below the header/text */
-  width: 50vw;       /* stays on the left half */
-  height: calc(100vh - 100px); /* fills remaining space */
+  margin-top: 100px;
+  width: 50vw;
+  height: calc(100vh - 100px);
   display: flex;
   justify-content: center;
   align-items: center;
   float: left;
+  background-color: #fff; /* blends with white site background */
 }
 
 .info-card {
@@ -150,12 +153,12 @@ function handlePointClick(point) {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  background-color: rgba(17, 17, 17, 0.95);
-  color: #fff;
-  border: 1px solid #333;
+  background-color: #ffffff;
+  color: #000;
+  border: 1px solid #ccc;
   border-radius: 12px;
   padding: 1rem 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   max-width: 320px;
   text-align: center;
   transition: all 0.3s ease;
@@ -163,11 +166,11 @@ function handlePointClick(point) {
 
 .stats {
   margin-top: 0.5em;
-  background: #222;         /* darker gray background */
-  color: #fff;              /* keep text white */
+  background: #f8f8f8;
+  color: #000;
   padding: 0.5em;
   border-radius: 6px;
-  border: 1px solid #444;   /* subtle outline for separation */
+  border: 1px solid #ddd;
 }
 
 .close-btn {
@@ -176,7 +179,7 @@ function handlePointClick(point) {
   right: 10px;
   background: none;
   border: none;
-  color: #fff;
+  color: #555;
   font-size: 1.3rem;
   font-weight: bold;
   cursor: pointer;
@@ -184,7 +187,6 @@ function handlePointClick(point) {
 }
 
 .close-btn:hover {
-  color: #EED800; /* subtle gold hover highlight */
+  color: #EED800; /* gold hover highlight */
 }
-
 </style>

@@ -691,12 +691,68 @@ const totalFaculty = computed(() =>
 </script>
 
 <style>
+
+/* Regular */
+@font-face {
+  font-family: 'Mozilla Text';
+  src: url('./assets/fonts/MozillaText-Regular.woff2') format('woff2'),
+       url('./assets/fonts/MozillaText-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Medium */
+@font-face {
+  font-family: 'Mozilla Text';
+  src: url('./assets/fonts/MozillaText-Medium.woff2') format('woff2'),
+       url('./assets/fonts/MozillaText-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* SemiBold */
+@font-face {
+  font-family: 'Mozilla Text';
+  src: url('./assets/fonts/MozillaText-SemiBold.woff2') format('woff2'),
+       url('./assets/fonts/MozillaText-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bold */
+@font-face {
+  font-family: 'Mozilla Text';
+  src: url('./assets/fonts/MozillaText-Bold.woff2') format('woff2'),
+       url('./assets/fonts/MozillaText-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Italic */
+@font-face {
+  font-family: 'Mozilla Text';
+  src: url('./assets/fonts/MozillaText-Italic.woff2') format('woff2'),
+       url('./assets/fonts/MozillaText-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 body {
-  background-color: #000;
-  color: white;
+  font-family: 'Mozilla Text', sans-serif;
+  background-color: #fff;
+  color: #000;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+}
+
+/* Headings slightly heavier */
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
 }
 
 /* 🔹 TOP SECTION */
@@ -720,7 +776,7 @@ body {
 
 .page-title {
   font-size: 28px;
-  color: white;
+  color: #000;
   margin: 0;
   line-height: 1.2;
 }
@@ -743,7 +799,7 @@ body {
 }
 
 .totals {
-  color: white;
+  color: #000;
   font-size: 16px;
   margin: 0;
 }
@@ -751,7 +807,7 @@ body {
 /* Right column (Articles Carousel) */
 .right-carousel {
   flex: 1 1 50%;
-  padding-left: 40px;        /* ✅ aligns left edge with video-section */
+  padding-left: 40px;        
   overflow: hidden;
   box-sizing: border-box;
   position: relative;
@@ -769,23 +825,23 @@ body {
 .carousel-item {
   flex: 0 0 250px;
   scroll-snap-align: start;
-  background: #111;
-  border: 1px solid #333;
+  background: #fff;
+  border: 1px solid #ccc;
   border-radius: 10px;
   padding: 1rem;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: #000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-item h3 {
   font-size: 1rem;
   margin-bottom: 0.3rem;
-  color: #fff;
+  color: #000;
 }
 
 .carousel-item p {
   font-size: 0.9rem;
-  color: #ccc;
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
