@@ -337,9 +337,9 @@ h1, h2, h3, h4, h5 {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 40px;
+  padding: 20px 40px;      /* ✅ reduced vertical padding */
   box-sizing: border-box;
-  margin-top: 40px;
+  margin-top: 10px;        /* ✅ was 40px — moves video higher */
 }
 
 .video-container {
