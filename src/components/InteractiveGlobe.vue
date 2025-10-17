@@ -53,8 +53,18 @@ onMounted(async () => {
   const res = await fetch('https://unpkg.com/world-atlas/countries-110m.json');
   const worldData = await res.json();
   countries = feature(worldData, worldData.objects.countries).features;
-
   updateCountries();
+  // Force globe to match container size immediately
+const resizeGlobe = () => {
+  if (!globeContainer.value) return;
+  const { clientWidth, clientHeight } = globeContainer.value;
+  globe.width(clientWidth);
+  globe.height(clientHeight);
+};
+
+// Run once on mount and again if window resizes
+resizeGlobe();
+window.addEventListener("resize", resizeGlobe);
 });
 
 // 🔹 Smooth transition when filtered points change
@@ -137,15 +147,17 @@ function handlePointClick(point) {
 <style scoped>
 .globe-container {
   position: relative;
-  margin-top: 100px;
-  width: 50vw;
-  height: calc(100vh - 100px);
+  width: 100%;
+  max-width: 750px;       /* ✅ wider and more prominent */
+  height: 420px;          /* ✅ taller for better visual balance */
+  margin: 0 auto;         /* centers the globe */
   display: flex;
   justify-content: center;
   align-items: center;
-  float: left;
-  background-color: #fff; /* blends with white site background */
+  background-color: #fff;
+  overflow: hidden;
 }
+
 
 .info-card {
   position: absolute;
@@ -189,4 +201,12 @@ function handlePointClick(point) {
 .close-btn:hover {
   color: #EED800; /* gold hover highlight */
 }
+
+@media (max-width: 900px) {
+  .globe-container {
+    max-width: 90%;
+    height: 320px;  /* ✅ smaller but still visible on tablets/mobiles */
+  }
+}
+
 </style>

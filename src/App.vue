@@ -1,44 +1,55 @@
 <template>
   <div>
-    <!-- 🔹 Top info section (title, filters, totals) -->
+    <!-- 🔹 Titles at top -->
     <div class="top-section">
       <div class="left-info">
         <h1 class="page-title">Mozilla Education:</h1>
         <h1 class="page-title">Showing our impact</h1>
-
-        <div class="filter-bar">
-          <div class="filter-group">
-            <label for="country">Filter by Country:</label>
-            <select id="country" v-model="selectedCountry">
-              <option value="">All</option>
-              <option v-for="country in uniqueCountries" :key="country" :value="country">
-                {{ country }}
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="category">Filter by Program:</label>
-            <select id="category" v-model="selectedCategory">
-              <option value="">All</option>
-              <option v-for="category in uniqueCategories" :key="category" :value="category">
-                {{ category }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <p class="totals">
-          Total Universities: {{ filteredPoints.length }} &nbsp; | &nbsp;
-          Total Students: {{ totalStudents.toLocaleString() }} &nbsp; | &nbsp;
-          Total Faculty: {{ totalFaculty.toLocaleString() }}
-        </p>
       </div>
     </div>
 
     <!-- 🔹 Globe first -->
     <div class="globe-section">
       <InteractiveGlobe :points="filteredPoints" />
+    </div>
+
+    <!-- 🔹 Filters + Totals now BELOW globe -->
+    <div class="filters-section">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label for="country">Filter by Country:</label>
+          <select id="country" v-model="selectedCountry">
+            <option value="">All</option>
+            <option
+              v-for="country in uniqueCountries"
+              :key="country"
+              :value="country"
+            >
+              {{ country }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="category">Filter by Program:</label>
+          <select id="category" v-model="selectedCategory">
+            <option value="">All</option>
+            <option
+              v-for="category in uniqueCategories"
+              :key="category"
+              :value="category"
+            >
+              {{ category }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <p class="totals">
+        Total Universities: {{ filteredPoints.length }} &nbsp; | &nbsp;
+        Total Students: {{ totalStudents.toLocaleString() }} &nbsp; | &nbsp;
+        Total Faculty: {{ totalFaculty.toLocaleString() }}
+      </p>
     </div>
 
     <!-- 🔹 Then video -->
@@ -48,10 +59,14 @@
       </div>
     </div>
 
-    <!-- 🔹 Then articles below -->
+    <!-- 🔹 Then articles -->
     <div class="articles-section">
       <div class="carousel-track">
-        <div v-for="article in articles" :key="article.title" class="carousel-item">
+        <div
+          v-for="article in articles"
+          :key="article.title"
+          class="carousel-item"
+        >
           <h3>{{ article.title }}</h3>
           <p>{{ article.summary }}</p>
           <a :href="article.link" target="_blank">Read more →</a>
@@ -60,6 +75,7 @@
     </div>
   </div>
 </template>
+
 
 
 <script setup>
@@ -189,6 +205,7 @@ const totalFaculty = computed(() =>
   font-style: normal;
   font-display: swap;
 }
+
 /* ===========================
    🔹 GLOBAL STYLES
 =========================== */
@@ -205,84 +222,37 @@ h1, h2, h3, h4, h5 {
 }
 
 /* ===========================
-   🔹 PAGE TITLES
+   🔹 TOP SECTION
 =========================== */
+.top-section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 40px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10; /* ✅ ensure titles always appear above */
+  background: #fff; /* keeps text readable if globe uses transparency */
+}
+
+.left-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.3rem;
+}
+
 .page-title {
   font-family: 'Mozilla Headline', sans-serif;
   font-size: 36px;
   color: #000;
   margin: 0;
-  line-height: 0.9; /* ✅ tighter vertical spacing */
-  text-align: left;
-  width: 100%;
+  line-height: 0.9;
 }
 
-/* ✅ Very small space between the two H1s */
 .page-title + .page-title {
-  margin-top: -0.2rem; /* negative margin brings them even closer */
-}
-
-/* Adjust container alignment for left justification */
-.left-info {
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  padding-left: 40px;
-  gap: 0.3rem; /* ✅ reduce overall vertical gaps inside the section */
-}
-
-/* ===========================
-   🔹 TOP SECTION
-=========================== */
-.top-section {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px;
-  gap: 40px;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-}
-
-.left-info {
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: center;
-  text-align: center;
-}
-
-.page-title {
-  font-size: 28px;
-  color: #000;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-  flex-wrap: wrap;
-}
-
-.filter-bar select {
-  background: #111;
-  color: #fff;
-  border: 1px solid #333;
-  border-radius: 6px;
-  padding: 0.4em 0.6em;
-  cursor: pointer;
-}
-
-.totals {
-  color: #000;
-  font-size: 16px;
-  margin: 0.5rem 0 0;
+  margin-top: -0.25rem;
 }
 
 /* ===========================
@@ -290,13 +260,73 @@ h1, h2, h3, h4, h5 {
 =========================== */
 .globe-section {
   width: 100%;
+  max-width: 1000px;       /* ✅ restricts overall width on load */
+  margin: 0 auto;          /* center horizontally */
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh;
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  height: 45vh;
+  max-height: 400px;
+  min-height: 280px;
+  margin-top: 30px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.globe-section canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 800px;        /* ✅ cap initial canvas width */
+  max-height: 400px;       /* ✅ prevents large startup rendering */
+  object-fit: contain;
+  display: block;
+}
+
+/* ===========================
+   🔹 FILTERS + TOTALS BELOW GLOBE (Visible + Not Overlapping)
+=========================== */
+.filters-section {
+  position: relative;
+  z-index: 5;
+  background: #fff;
+  width: 100%;
+  text-align: center;
+  padding: 20px 40px 40px;
+  margin-top: 0; /* ✅ now directly follows the globe */
+  box-sizing: border-box;
+  display: block;
+}
+
+.filters-section .filter-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5em;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.filters-section label {
+  font-weight: 600;
+  color: #000;
+}
+
+.filters-section select {
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.4em 0.6em;
+  cursor: pointer;
+  font-family: 'Mozilla Text', sans-serif;
+}
+
+.filters-section .totals {
+  color: #000;
+  font-size: 16px;
+  margin-top: 0.5rem;
 }
 
 /* ===========================
@@ -381,27 +411,31 @@ h1, h2, h3, h4, h5 {
 }
 
 /* ===========================
-   🔹 RESPONSIVE
+   🔹 RESPONSIVE DESIGN
 =========================== */
 @media (max-width: 900px) {
   .top-section {
     flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    align-items: flex-start;
     padding: 20px;
   }
 
-  .left-info {
-    text-align: center;
-  }
-
-  .filter-bar {
-    flex-direction: column;
-    gap: 10px;
+  .page-title {
+    font-size: 28px;
   }
 
   .globe-section {
-    height: auto;
+    padding-bottom: 80px;
+  }
+
+  .filters-section {
+    margin-top: -40px;
+    padding: 20px;
+  }
+
+  .filters-section .filter-bar {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .video-section {
@@ -416,6 +450,5 @@ h1, h2, h3, h4, h5 {
     flex: 0 0 220px;
   }
 }
-
 </style>
 
