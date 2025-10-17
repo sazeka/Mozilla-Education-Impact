@@ -1,9 +1,10 @@
 <template>
   <div>
-    <!-- 🔹 Top row: Left info (title, filter, totals) + Right carousel -->
+    <!-- 🔹 Top info section (title, filters, totals) -->
     <div class="top-section">
       <div class="left-info">
-        <h1 class="page-title">Mozilla Education Impact</h1>
+        <h1 class="page-title">Mozilla Education:</h1>
+        <h1 class="page-title">Showing our impact</h1>
 
         <div class="filter-bar">
           <div class="filter-group">
@@ -33,32 +34,33 @@
           Total Faculty: {{ totalFaculty.toLocaleString() }}
         </p>
       </div>
+    </div>
 
-      <!-- 🔹 Carousel now aligned to the right of the entire left column -->
-      <div class="right-carousel">
-        <div class="carousel-track">
-          <div v-for="article in articles" :key="article.title" class="carousel-item">
-            <h3>{{ article.title }}</h3>
-            <p>{{ article.summary }}</p>
-            <a :href="article.link" target="_blank">Read more →</a>
-          </div>
-        </div>
+    <!-- 🔹 Globe first -->
+    <div class="globe-section">
+      <InteractiveGlobe :points="filteredPoints" />
+    </div>
+
+    <!-- 🔹 Then video -->
+    <div class="video-section">
+      <div class="video-container">
+        <VideoCarousel />
       </div>
     </div>
 
-    <!-- 🔹 Globe + Video -->
-    <div class="content-split">
-      <div class="globe-section">
-        <InteractiveGlobe :points="filteredPoints" />
-      </div>
-      <div class="video-section">
-        <div class="video-container">
-          <VideoCarousel />
+    <!-- 🔹 Then articles below -->
+    <div class="articles-section">
+      <div class="carousel-track">
+        <div v-for="article in articles" :key="article.title" class="carousel-item">
+          <h3>{{ article.title }}</h3>
+          <p>{{ article.summary }}</p>
+          <a :href="article.link" target="_blank">Read more →</a>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
@@ -132,8 +134,9 @@ const totalFaculty = computed(() =>
 
 
 <style>
-
-/* Regular */
+/* ===========================
+   🔹 FONT IMPORTS
+=========================== */
 @font-face {
   font-family: 'Mozilla Text';
   src: url('./assets/fonts/MozillaText-Regular.woff2') format('woff2'),
@@ -143,7 +146,6 @@ const totalFaculty = computed(() =>
   font-display: swap;
 }
 
-/* Medium */
 @font-face {
   font-family: 'Mozilla Text';
   src: url('./assets/fonts/MozillaText-Medium.woff2') format('woff2'),
@@ -153,7 +155,6 @@ const totalFaculty = computed(() =>
   font-display: swap;
 }
 
-/* SemiBold */
 @font-face {
   font-family: 'Mozilla Text';
   src: url('./assets/fonts/MozillaText-SemiBold.woff2') format('woff2'),
@@ -163,7 +164,6 @@ const totalFaculty = computed(() =>
   font-display: swap;
 }
 
-/* Bold */
 @font-face {
   font-family: 'Mozilla Text';
   src: url('./assets/fonts/MozillaText-Bold.woff2') format('woff2'),
@@ -173,7 +173,6 @@ const totalFaculty = computed(() =>
   font-display: swap;
 }
 
-/* Italic */
 @font-face {
   font-family: 'Mozilla Text';
   src: url('./assets/fonts/MozillaText-Italic.woff2') format('woff2'),
@@ -183,6 +182,16 @@ const totalFaculty = computed(() =>
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Mozilla Headline';
+  src: url('./assets/fonts/MozillaHeadline-SemiBold.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* ===========================
+   🔹 GLOBAL STYLES
+=========================== */
 body {
   font-family: 'Mozilla Text', sans-serif;
   background-color: #fff;
@@ -191,28 +200,59 @@ body {
   padding: 0;
 }
 
-/* Headings slightly heavier */
 h1, h2, h3, h4, h5 {
   font-weight: 600;
 }
 
-/* 🔹 TOP SECTION */
+/* ===========================
+   🔹 PAGE TITLES
+=========================== */
+.page-title {
+  font-family: 'Mozilla Headline', sans-serif;
+  font-size: 36px;
+  color: #000;
+  margin: 0;
+  line-height: 0.9; /* ✅ tighter vertical spacing */
+  text-align: left;
+  width: 100%;
+}
+
+/* ✅ Very small space between the two H1s */
+.page-title + .page-title {
+  margin-top: -0.2rem; /* negative margin brings them even closer */
+}
+
+/* Adjust container alignment for left justification */
+.left-info {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 40px;
+  gap: 0.3rem; /* ✅ reduce overall vertical gaps inside the section */
+}
+
+/* ===========================
+   🔹 TOP SECTION
+=========================== */
 .top-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   padding: 40px;
   gap: 40px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   box-sizing: border-box;
 }
 
-/* Left info column */
 .left-info {
-  flex: 0 1 40%;
+  flex: 1 1 100%;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  align-items: center;
+  text-align: center;
 }
 
 .page-title {
@@ -224,9 +264,9 @@ h1, h2, h3, h4, h5 {
 
 .filter-bar {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.5em;
-  font-size: 1rem;
+  gap: 1em;
   flex-wrap: wrap;
 }
 
@@ -242,20 +282,55 @@ h1, h2, h3, h4, h5 {
 .totals {
   color: #000;
   font-size: 16px;
-  margin: 0;
+  margin: 0.5rem 0 0;
 }
 
-/* Right column (Articles Carousel) */
-.right-carousel {
-  flex: 1 1 50%;
-  padding-left: 40px;        
-  overflow: hidden;
-  box-sizing: border-box;
+/* ===========================
+   🔹 GLOBE SECTION
+=========================== */
+.globe-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
   position: relative;
-  z-index: 10;
+  z-index: 1;
+  margin-top: 20px;
 }
 
-.carousel-track {
+/* ===========================
+   🔹 VIDEO SECTION
+=========================== */
+.video-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  box-sizing: border-box;
+  margin-top: 40px;
+}
+
+.video-container {
+  width: 80%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===========================
+   🔹 ARTICLES SECTION
+=========================== */
+.articles-section {
+  width: 100%;
+  padding: 40px;
+  box-sizing: border-box;
+  margin-top: 40px;
+}
+
+.articles-section .carousel-track {
   display: flex;
   gap: 2rem;
   overflow-x: auto;
@@ -263,7 +338,7 @@ h1, h2, h3, h4, h5 {
   padding-bottom: 1rem;
 }
 
-.carousel-item {
+.articles-section .carousel-item {
   flex: 0 0 250px;
   scroll-snap-align: start;
   background: #fff;
@@ -274,83 +349,40 @@ h1, h2, h3, h4, h5 {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.carousel-item h3 {
+.articles-section .carousel-item h3 {
   font-size: 1rem;
   margin-bottom: 0.3rem;
   color: #000;
 }
 
-.carousel-item p {
+.articles-section .carousel-item p {
   font-size: 0.9rem;
   color: #333;
   margin-bottom: 0.5rem;
 }
 
-.carousel-item a {
+.articles-section .carousel-item a {
   color: #EED800;
   font-weight: bold;
   text-decoration: none;
 }
 
-.carousel-item a:hover {
+.articles-section .carousel-item a:hover {
   text-decoration: underline;
 }
 
 /* scrollbar styling */
-.carousel-track::-webkit-scrollbar {
+.articles-section .carousel-track::-webkit-scrollbar {
   height: 6px;
 }
-.carousel-track::-webkit-scrollbar-thumb {
+.articles-section .carousel-track::-webkit-scrollbar-thumb {
   background: #EED800;
   border-radius: 4px;
 }
 
-/* 🔹 GLOBE + VIDEO */
-.content-split {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-top: -30px;
-  width: 100%;
-  gap: 40px;
-  padding: 0 40px;
-  box-sizing: border-box;
-}
-
-.globe-section {
-  flex: 1 1 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 70vh;
-  position: relative;
-  z-index: 1;
-}
-
-
-/* Right video column */
-.video-section {
-  flex: 1 1 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding-left: 40px;        /* ✅ same left padding as .right-carousel */
-  text-align: center;
-  box-sizing: border-box;
-}
-
-
-.video-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-/* 🔹 RESPONSIVE */
+/* ===========================
+   🔹 RESPONSIVE
+=========================== */
 @media (max-width: 900px) {
   .top-section {
     flex-direction: column;
@@ -360,34 +392,28 @@ h1, h2, h3, h4, h5 {
   }
 
   .left-info {
-    flex: 1 1 100%;
     text-align: center;
-    align-items: center;
   }
 
-  .right-carousel {
-    flex: 1 1 100%;
-  }
-
-  .carousel-item {
-    flex: 0 0 220px;
-  }
-
-  .content-split {
+  .filter-bar {
     flex-direction: column;
-    align-items: center;
-    padding: 0 20px;
-    gap: 20px;
+    gap: 10px;
   }
 
-  .globe-section,
-  .video-section {
-    width: 100%;
+  .globe-section {
     height: auto;
   }
 
   .video-section {
-    padding-right: 0;
+    padding: 20px;
+  }
+
+  .articles-section {
+    padding: 20px;
+  }
+
+  .articles-section .carousel-item {
+    flex: 0 0 220px;
   }
 }
 
