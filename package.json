@@ -15,6 +15,7 @@
   "dependencies": {
     "d3-geo": "^3.1.1",
     "globe.gl": "^2.44.0",
+    "papaparse": "^5.5.3",
     "topojson-client": "^3.1.0",
     "vue": "^3.5.22",
     "vue3-carousel": "^0.16.0"

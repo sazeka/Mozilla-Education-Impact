@@ -1,0 +1,33 @@
+name,lat,lng,description,students,faculty,country,category,leadPI,projectTitle
+King's College London,51.511448,-0.116414,Located in London.,15,1,United Kingdom,Education Hub,Dr Sylvie Delacroix,Data Empowerment
+Dedan Kimathi University of Technology,-0.3956,36.957,"Located in Nyeri, Kenya.",194,24,Kenya,Responsible Computing Challenge,Dr George Musumba,Mainstreaming Ethics Risk in Computer Programming
+The University of Nairobi,-1.2798,36.8172,Largest university in Kenya.,166,2,Kenya,Responsible Computing Challenge,Dr Elisha Abade,"BESTe-CS: Blending Ethics, Society and Technology through Computer Science"
+Meru University,0.1046,37.6528,Public university in Meru County.,563,6,Kenya,Responsible Computing Challenge,Dr Mary Mwadulo,Student Team Dynamics
+Kirinyaga University,-0.6238,37.3281,Public university in Central Kenya.,209,11,Kenya,Responsible Computing Challenge,Dr Kennedy Malanga,Responsible Computing Animated
+University of Embu,-0.5303,37.4575,Growing institution in Embu.,100,9,Kenya,Responsible Computing Challenge,Dr Victoria Mukami,Innovative multidisciplinary ethically informed student projects through critical and design thinking
+Riara University,-1.3027,36.7848,Private university in Nairobi.,188,9,Kenya,Responsible Computing Challenge,Prof Felix Musau,RAPID Computing Using Problem-Based Learning Approach
+Jomo Kenyatta University of Agriculture and Technology,-1.1012,37.012,Tech-focused university in Juja.,112,6,Kenya,Responsible Computing Challenge,Dr Eunice Njeri,Teaching Responsible Computing using Robotics
+Kisii University,-0.6817,34.7652,Public university in Kisii County.,215,8,Kenya,Responsible Computing Challenge,Dr Fredrick Awuor,Ethical AI
+Marian College Kuttikkanam Autonomous,9.6027,76.9935,"Autonomous college in Kerala, India.",217,7,India,Responsible Computing Challenge,,
+IIT Indore,22.5215,75.9235,Indian Institute of Technology in Indore.,12,1,India,Responsible Computing Challenge,,
+Ashoka University,28.9405,77.6368,Private liberal arts university in Haryana.,165,3,India,Responsible Computing Challenge,,
+IIT Guwahati,26.1878,91.6911,"Leading IIT in Assam, India.",0,4,India,Responsible Computing Challenge,,
+Shri Vile Parle Kelavani Mandal’s Dwarkadas J. Sanghvi College of Engineering,19.1034,72.8366,Private engineering college in Mumbai.,179,5,India,Responsible Computing Challenge,,
+NIT Warangal,17.9784,79.5941,National Institute of Technology in Telangana.,180,3,India,Responsible Computing Challenge,,
+IIIT Kottayam,9.6431,76.7798,Indian Institute of Information Technology in Kerala.,117,5,India,Responsible Computing Challenge,,
+CHRIST (Deemed to be University),12.9352,77.6068,Major private university in Bengaluru.,450,7,India,Responsible Computing Challenge,,
+"Kerala University of Digital Sciences, Innovation and Technology",8.556,76.8812,New digital university in Kerala.,0,4,India,Responsible Computing Challenge,,
+University of Cape Town,-33.957,18.4607,Embedding conceptual tools for ethical engagement in technical engineering content,0,0,South Africa,Responsible Computing Challenge,,
+University of Witwatersrand,-26.1929,28.03,Leading research university in Johannesburg.,0,0,South Africa,Responsible Computing Challenge,,
+"Central University of Technology, Free State",-29.1183,26.214,Tech university in Bloemfontein.,0,0,South Africa,Responsible Computing Challenge,,
+University of Pretoria,-25.7545,28.2314,One of the largest universities in South Africa.,0,0,South Africa,Responsible Computing Challenge,,
+University of Fort Hare,-32.7869,26.8336,Historic institution in Alice.,0,0,South Africa,Responsible Computing Challenge,,
+Durban University of Technology,-29.8532,30.9257,Multicampus university in Durban.,0,0,South Africa,Responsible Computing Challenge,,
+Sol Plaatje University,-28.7382,24.7636,New public university in Kimberley.,0,0,South Africa,Responsible Computing Challenge,,
+Harvard College,42.377,-71.1167,"Oldest university in the US, in Massachusetts.",5811,9,United States,Responsible Computing Challenge,,
+Prairie View A&M University,30.0955,-95.986,Historically Black university in Texas.,140,6,United States,Responsible Computing Challenge,,
+University of Washington,47.6553,-122.3035,Large public research university in Seattle.,704,82,United States,Responsible Computing Challenge,,
+University of Michigan,42.278,-83.7382,Top public university in Michigan.,51,6,United States,Responsible Computing Challenge,,
+University of Notre Dame,41.7034,-86.2386,Private Catholic research university in Indiana.,100,11,United States,Responsible Computing Challenge,,
+Howard University,38.9226,-77.019,"Historic HBCU in Washington, D.C.",154,5,United States,Responsible Computing Challenge,,
+Adelphi University,40.7209,-73.6524,Private university in New York.,40,500,United States,Responsible Computing Challenge,Dr Suraj Uttamchandani,Spatial Justice as a Bridge to Responsible Computing
