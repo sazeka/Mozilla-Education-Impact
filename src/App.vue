@@ -82,34 +82,70 @@
       </div>
 
       <!-- 🔹 Controls -->
-      <div class="carousel-controls">
-        <button @click="prevSlide">‹</button>
-        <button @click="nextSlide">›</button>
-      </div>
+      <!-- 🔹 Controls -->
+<div class="carousel-controls">
+  <button @click="prevSlide" class="arrow-btn left">
+    <img src="@/assets/Scribble_02_Light_RGB.png" alt="Previous" class="arrow-img" />
+  </button>
+    <button @click="togglePause" class="pause-btn">
+    <img
+      src="@/assets/Scribble_10_Light_RGB.png"
+      alt="Pause/Play"
+      class="pause-img"
+      :class="{ paused: isPaused }"
+    />
+  </button>
+  <button @click="nextSlide" class="arrow-btn right">
+    <img src="@/assets/Scribble_01_Light_RGB.png" alt="Next" class="arrow-img" />
+  </button>
+</div>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import InteractiveGlobe from './components/InteractiveGlobe.vue';
 import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
 
-// 🔹 Carousel state
+// 🔹 Reactive state
 const currentSlide = ref(0);
 const totalSlides = 3;
+const isPaused = ref(false);
+let intervalId = null;
 
+// 🔹 Carousel navigation
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % totalSlides;
 };
+
 const prevSlide = () => {
   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides;
 };
 
-// Auto-rotate every 20s
+// 🔹 Pause / Play logic
+const togglePause = () => {
+  isPaused.value = !isPaused.value;
+};
+
+// 🔹 Auto-rotation
+const startAutoRotate = () => {
+  clearInterval(intervalId);
+  intervalId = setInterval(() => {
+    if (!isPaused.value) {
+      nextSlide();
+    }
+  }, 20000);
+};
+
 onMounted(() => {
-  setInterval(nextSlide, 20000);
+  startAutoRotate();
+});
+
+onUnmounted(() => {
+  clearInterval(intervalId);
 });
 
 // 🔹 Articles Data
@@ -140,7 +176,7 @@ onMounted(async () => {
   points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
 });
 
-// Computed Filters
+// 🔹 Computed Filters
 const uniqueCategories = computed(() =>
   [...new Set(points.value.map(p => p.category).filter(Boolean))]
 );
@@ -155,13 +191,14 @@ const filteredPoints = computed(() =>
   })
 );
 
-// Totals
+// 🔹 Totals
 const totalStudents = computed(() =>
   filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
 );
 const totalFaculty = computed(() =>
   filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
 );
+
 </script>
 
 <style>
@@ -267,21 +304,65 @@ const totalFaculty = computed(() =>
   z-index: 50;
 }
 .carousel-controls button {
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  border: none;
-  padding: 0.6em 1.2em;
+  background: none;          /* remove circle background */
+  color: #000;               /* change text color if needed */
+  border: none;              /* remove border */
+  padding: 0;                /* remove padding around arrows */
   font-size: 1.8rem;
-  border-radius: 50%;
+  border-radius: 0;          /* remove rounded shape */
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(3px);
-}
-.carousel-controls button:hover {
-  background: #EED800;
-  color: #000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  backdrop-filter: none;     /* remove blur effect */
 }
 
+.carousel-controls button:hover {
+  background: none;          /* keep transparent on hover */
+  transform: scale(1.1);
+}
+
+.arrow-img {
+  width: 64px;       /* size of the arrow images */
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.9;
+}
+
+.arrow-btn.right:hover .arrow-img {
+  transform: scale(1.1) rotate(3deg);
+  opacity: 1;
+}
+
+.pause-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pause-img {
+  width: 64px;          /* Adjust size to match arrows */
+  height: auto;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.pause-img:hover {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+.pause-img.paused {
+  filter: grayscale(100%) brightness(0.7); /* visually indicate paused state */
+}
+
+@media (max-width: 900px) {
+  .arrow-img {
+    width: 48px;   /* smaller on tablets/phones */
+  }
+}
 /* ===========================
    🔹 GLOBE SECTION
 =========================== */
