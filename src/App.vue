@@ -91,17 +91,16 @@
                 <!-- 🖼️ Image BELOW date -->
                 <img
                   v-if="article.image"
-                  :src="article.image"
+                  :src="getImagePath(article.image)"
                   :alt="article.title"
                   class="article-image"
                 />
                 <img
                   v-else
-                  src="https://via.placeholder.com/400x250?text=Article+Image"
+                  src="@/assets/images/articles/default.jpg"
                   alt="Default placeholder"
                   class="article-image"
                 />
-
                 <p>{{ article.summary }}</p>
                 <a :href="article.link" target="_blank" rel="noopener">Read more →</a>
               </div>
@@ -142,6 +141,17 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import InteractiveGlobe from './components/InteractiveGlobe.vue';
 import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
+
+// Dynamically resolve image paths from /src/assets/images/articles
+const getImagePath = (filename) => {
+  try {
+    // ✅ Vite handles assets using import.meta.url
+    return new URL(`/src/assets/images/articles/${filename}`, import.meta.url).href;
+  } catch (err) {
+    console.warn("Image not found:", filename);
+    return new URL(`/src/assets/images/articles/default.jpg`, import.meta.url).href;
+  }
+};
 
 // 🔹 Reactive state
 const currentSlide = ref(0);
@@ -589,13 +599,12 @@ const totalFaculty = computed(() =>
 }
 .article-image {
   width: 100%;
-  height: 150px;              
+  aspect-ratio: 16 / 9;    
   object-fit: cover;
   border-radius: 8px;
   margin: 0.5rem 0;
-  flex-shrink: 0;
+  display: block;
 }
-
 
 
 /* ===========================
