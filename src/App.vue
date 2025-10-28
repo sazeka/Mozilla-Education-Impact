@@ -19,14 +19,16 @@
     <!-- 🔹 Carousel wrapper -->
     <div class="carousel-wrapper">
       <div class="carousel" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-
+        
         <!-- 🌍 Slide 1: Globe + Filters + Totals -->
         <div class="carousel-slide">
           <div class="globe-section">
             <InteractiveGlobe :points="filteredPoints" />
           </div>
+
           <div class="filters-section">
             <div class="filter-bar">
+              <!-- Country Filter -->
               <div class="filter-group">
                 <label for="country">Filter by Country:</label>
                 <select id="country" v-model="selectedCountry">
@@ -37,6 +39,7 @@
                 </select>
               </div>
 
+              <!-- Category Filter -->
               <div class="filter-group">
                 <label for="category">Filter by Program:</label>
                 <select id="category" v-model="selectedCategory">
@@ -66,140 +69,131 @@
         <!-- 📰 Slide 3: Articles -->
         <div class="carousel-slide">
           <div class="articles-section">
-            <div class="carousel-track">
+            <button class="article-arrow left" @click="scrollArticles(-1)">‹</button>
+
+            <div class="carousel-track" ref="articleTrack">
               <div
-                v-for="article in articles"
-                :key="article.title"
+                v-for="(article, i) in articles"
+                :key="article.title + '_' + i"
                 class="carousel-item"
               >
                 <h3>{{ article.title }}</h3>
+                <p class="article-date">
+                  {{ new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+                </p>
                 <p>{{ article.summary }}</p>
-                <a :href="article.link" target="_blank">Read more →</a>
+                <a :href="article.link" target="_blank" rel="noopener">Read more →</a>
               </div>
+
             </div>
+
+            <button class="article-arrow right" @click="scrollArticles(1)">›</button>
           </div>
         </div>
+
+      </div> <!-- ✅ closes .carousel -->
+
+      <!-- 🔹 Carousel Controls -->
+      <div class="carousel-controls">
+        <button @click="prevSlide" class="arrow-btn left">
+          <img src="@/assets/Scribble_02_Light_RGB.png" alt="Previous" class="arrow-img" />
+        </button>
+
+        <button @click="togglePause" class="pause-btn">
+          <img
+            src="@/assets/Scribble_10_Light_RGB.png"
+            alt="Pause/Play"
+            class="pause-img"
+            :class="{ paused: isPaused }"
+          />
+        </button>
+
+        <button @click="nextSlide" class="arrow-btn right">
+          <img src="@/assets/Scribble_01_Light_RGB.png" alt="Next" class="arrow-img" />
+        </button>
       </div>
-
-      <!-- 🔹 Controls -->
-      <!-- 🔹 Controls -->
-<div class="carousel-controls">
-  <button @click="prevSlide" class="arrow-btn left">
-    <img src="@/assets/Scribble_02_Light_RGB.png" alt="Previous" class="arrow-img" />
-  </button>
-    <button @click="togglePause" class="pause-btn">
-    <img
-      src="@/assets/Scribble_10_Light_RGB.png"
-      alt="Pause/Play"
-      class="pause-img"
-      :class="{ paused: isPaused }"
-    />
-  </button>
-  <button @click="nextSlide" class="arrow-btn right">
-    <img src="@/assets/Scribble_01_Light_RGB.png" alt="Next" class="arrow-img" />
-  </button>
-</div>
-
-    </div>
-  </div>
+    </div> <!-- ✅ closes .carousel-wrapper -->
+  </div> <!-- ✅ closes root div -->
 </template>
 
+
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import InteractiveGlobe from './components/InteractiveGlobe.vue';
-import VideoCarousel from "@/components/VideoCarousel.vue";
-import { loadCSV } from "@/utils/loadCSV.js";
+  import { ref, computed, onMounted, onUnmounted } from 'vue';
+  import InteractiveGlobe from './components/InteractiveGlobe.vue';
+  import VideoCarousel from "@/components/VideoCarousel.vue";
+  import { loadCSV } from "@/utils/loadCSV.js";
 
-// 🔹 Reactive state
-const currentSlide = ref(0);
-const totalSlides = 3;
-const isPaused = ref(false);
-let intervalId = null;
+  // 🔹 Article carousel scroll 
+  const articleTrack = ref(null);
 
-// 🔹 Carousel navigation
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % totalSlides;
-};
-
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides;
-};
-
-// 🔹 Pause / Play logic
-const togglePause = () => {
-  isPaused.value = !isPaused.value;
-};
-
-// 🔹 Auto-rotation
-const startAutoRotate = () => {
-  clearInterval(intervalId);
-  intervalId = setInterval(() => {
-    if (!isPaused.value) {
-      nextSlide();
-    }
-  }, 20000);
-};
-
-onMounted(() => {
-  startAutoRotate();
-});
-
-onUnmounted(() => {
-  clearInterval(intervalId);
-});
-
-// 🔹 Articles Data
-const articles = [
-  {
-    title: "Algorithmic Bias, Marketplaces, and Diversity Regulation",
-    summary: "Lance (Yong) Park (Howard University, RCC USA) Presenting paper at TPRC53 August 1, 2024.",
-    link: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4912069"
-  },
-  {
-    title: "Bridging Technology, Ethics and Rural Justice",
-    summary: "Marco Robinson (Prairie View A&M, RCC USA) Published article June 20, 2025.",
-    link: "https://www.pvamu.edu/research/post/bridging-technology-ethics-and-rural-justice-pvamu-team-receives-mozilla-funding/"
-  },
-  {
-    title: "Inclusive Computing Education",
-    summary: "Centering ethics, justice, and collaboration in CS classrooms.",
-    link: "https://example.com/inclusive-computing"
+const scrollArticles = (direction) => {
+  if (articleTrack.value) {
+    const scrollAmount = 300; // pixels per click
+    articleTrack.value.scrollBy({
+      left: direction * scrollAmount,
+      behavior: "smooth",
+    });
   }
-];
+};
 
-// 🔹 Data + Filters
-const points = ref([]);
-const selectedCategory = ref('');
-const selectedCountry = ref('');
+  
+  // 🔹 Reactive state
+  const currentSlide = ref(0);
+  const totalSlides = 3;
+  const isPaused = ref(false);
+  let intervalId = null;
 
-onMounted(async () => {
-  points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
-});
+  // 🔹 Data
+  const points = ref([]);
+  const articles = ref([]);
+  const selectedCategory = ref('');
+  const selectedCountry = ref('');
 
-// 🔹 Computed Filters
-const uniqueCategories = computed(() =>
-  [...new Set(points.value.map(p => p.category).filter(Boolean))]
-);
-const uniqueCountries = computed(() =>
-  [...new Set(points.value.map(p => p.country?.trim() || p.Country?.trim() || '').filter(Boolean))]
-);
-const filteredPoints = computed(() =>
-  points.value.filter(p => {
-    const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
-    const matchCountry = selectedCountry.value ? p.country === selectedCountry.value : true;
-    return matchCategory && matchCountry;
-  })
-);
+  // 🔹 Navigation
+  const nextSlide = () => { currentSlide.value = (currentSlide.value + 1) % totalSlides; };
+  const prevSlide = () => { currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides; };
+  const togglePause = () => { isPaused.value = !isPaused.value; };
 
-// 🔹 Totals
-const totalStudents = computed(() =>
-  filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
-);
-const totalFaculty = computed(() =>
-  filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
-);
+  // 🔹 Auto-rotation
+  const startAutoRotate = () => {
+    clearInterval(intervalId);
+    intervalId = setInterval(() => {
+      if (!isPaused.value) nextSlide();
+    }, 20000);
+  };
+  onMounted(startAutoRotate);
+  onUnmounted(() => clearInterval(intervalId));
 
+  // ✅ Load both CSV files in one place
+  onMounted(async () => {
+    points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
+    articles.value = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
+  });
+
+  // 🔹 Filters
+  const uniqueCategories = computed(() =>
+    [...new Set(points.value.map(p => p.category).filter(Boolean))]
+  );
+  const uniqueCountries = computed(() =>
+    [...new Set(points.value.map(p => p.country?.trim() || p.Country?.trim() || '').filter(Boolean))]
+  );
+  const filteredPoints = computed(() =>
+    points.value.filter(p => {
+      const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
+      const matchCountry = selectedCountry.value ? p.country === selectedCountry.value : true;
+      return matchCategory && matchCountry;
+    })
+  );
+
+  // 🔹 Totals
+  const totalStudents = computed(() =>
+    filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
+  );
+  const totalFaculty = computed(() =>
+    filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
+  );
 </script>
+
 
 <style>
 /* ===========================
@@ -455,19 +449,49 @@ const totalFaculty = computed(() =>
    🔹 ARTICLES SECTION
 =========================== */
 .articles-section {
+  position: relative;
   width: 100%;
   padding: 40px;
-  box-sizing: border-box;
-  margin-top: 40px;
-}
-.articles-section .carousel-track {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.article-date {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.4rem;
+  font-style: italic;
+}
+
+.carousel-track {
+  display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding-bottom: 1rem;
+  gap: 2rem;
+  scroll-behavior: smooth;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1000px;
 }
-.articles-section .carousel-item {
+
+.article-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #000;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.3s;
+}
+.article-arrow:hover { opacity: 0.7; }
+.article-arrow.left { left: 10px; }
+.article-arrow.right { right: 10px; }
+
+.carousel-item {
   flex: 0 0 250px;
   scroll-snap-align: start;
   background: #fff;
@@ -477,31 +501,7 @@ const totalFaculty = computed(() =>
   color: #000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-.articles-section .carousel-item h3 {
-  font-size: 1rem;
-  margin-bottom: 0.3rem;
-  color: #000;
-}
-.articles-section .carousel-item p {
-  font-size: 0.9rem;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-.articles-section .carousel-item a {
-  color: #EED800;
-  font-weight: bold;
-  text-decoration: none;
-}
-.articles-section .carousel-item a:hover {
-  text-decoration: underline;
-}
-.articles-section .carousel-track::-webkit-scrollbar {
-  height: 6px;
-}
-.articles-section .carousel-track::-webkit-scrollbar-thumb {
-  background: #EED800;
-  border-radius: 4px;
-}
+
 
 /* ===========================
    🔹 RESPONSIVE

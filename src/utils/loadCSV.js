@@ -2,23 +2,31 @@ import Papa from "papaparse";
 
 export async function loadCSV(filePath) {
   const response = await fetch(filePath);
-  const text = await response.text();
+  if (!response.ok) {
+    console.error("❌ Failed to fetch CSV:", filePath, response.status);
+    return [];
+  }
 
-  const { data } = Papa.parse(text, {
+  const text = await response.text();
+  const { data, errors } = Papa.parse(text, {
     header: true,
     skipEmptyLines: true,
   });
 
-  // ✅ Normalize keys to lowercase and include all expected fields
-  return data.map(rawItem => {
-    const item = {};
-    for (const key in rawItem) {
-      if (Object.hasOwn(rawItem, key)) {
-        item[key.trim().toLowerCase()] = rawItem[key]?.trim();
-      }
-    }
+  if (errors.length) console.warn("⚠️ CSV parse errors:", errors);
 
-    return {
+  // ✅ Normalize headers
+  const normalizedData = data.map(row => {
+    const normalized = {};
+    for (const key in row) {
+      normalized[key.trim().toLowerCase()] = row[key]?.trim();
+    }
+    return normalized;
+  });
+
+  // ✅ Special handling for university CSVs
+  if (filePath.includes("universities")) {
+    return normalizedData.map(item => ({
       name: item.name,
       lat: parseFloat(item.lat),
       lng: parseFloat(item.lng),
@@ -28,7 +36,10 @@ export async function loadCSV(filePath) {
       category: item.category,
       leadPI: item.leadpi,
       projectTitle: item.projecttitle,
-      country: item.country, // ✅ added
-    };
-  });
+      country: item.country,
+    }));
+  }
+
+  // ✅ For all other CSVs (like articles)
+  return normalizedData;
 }
