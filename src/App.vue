@@ -30,7 +30,7 @@
             <div class="filter-bar">
               <!-- Country Filter -->
               <div class="filter-group">
-                <label for="country">Filter by Country:</label>
+                <label for="country">Filter by Country: </label>
                 <select id="country" v-model="selectedCountry">
                   <option value="">All</option>
                   <option v-for="country in uniqueCountries" :key="country" :value="country">
@@ -41,7 +41,7 @@
 
               <!-- Category Filter -->
               <div class="filter-group">
-                <label for="category">Filter by Program:</label>
+                <label for="category">Filter by Program: </label>
                 <select id="category" v-model="selectedCategory">
                   <option value="">All</option>
                   <option v-for="category in uniqueCategories" :key="category" :value="category">
@@ -118,84 +118,91 @@
 
 
 <script setup>
-  import { ref, computed, onMounted, onUnmounted } from 'vue';
-  import InteractiveGlobe from './components/InteractiveGlobe.vue';
-  import VideoCarousel from "@/components/VideoCarousel.vue";
-  import { loadCSV } from "@/utils/loadCSV.js";
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import InteractiveGlobe from './components/InteractiveGlobe.vue';
+import VideoCarousel from "@/components/VideoCarousel.vue";
+import { loadCSV } from "@/utils/loadCSV.js";
 
-  // 🔹 Article carousel scroll 
-  const articleTrack = ref(null);
+// 🔹 Reactive state
+const currentSlide = ref(0);
+const totalSlides = 3;
+const isPaused = ref(false);
+let intervalId = null;
 
+// 🔹 Data
+const points = ref([]);
+const articles = ref([]);
+const selectedCategory = ref('');
+const selectedCountry = ref('');
+
+// 🔹 Navigation
+const nextSlide = () => { currentSlide.value = (currentSlide.value + 1) % totalSlides; };
+const prevSlide = () => { currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides; };
+const togglePause = () => { isPaused.value = !isPaused.value; };
+
+// 🔹 Article scroll
+const articleTrack = ref(null);
 const scrollArticles = (direction) => {
   if (articleTrack.value) {
-    const scrollAmount = 300; // pixels per click
-    articleTrack.value.scrollBy({
-      left: direction * scrollAmount,
-      behavior: "smooth",
-    });
+    const scrollAmount = 300;
+    articleTrack.value.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
   }
 };
 
-  
-  // 🔹 Reactive state
-  const currentSlide = ref(0);
-  const totalSlides = 3;
-  const isPaused = ref(false);
-  let intervalId = null;
+// 🔹 Auto-rotation
+const startAutoRotate = () => {
+  clearInterval(intervalId);
+  intervalId = setInterval(() => {
+    if (!isPaused.value) nextSlide();
+  }, 10000);
+};
 
-  // 🔹 Data
-  const points = ref([]);
-  const articles = ref([]);
-  const selectedCategory = ref('');
-  const selectedCountry = ref('');
+// ✅ Merge data loading + auto-rotation
+onMounted(async () => {
+  points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
+  articles.value = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
+  startAutoRotate(); // start after data is loaded
+});
 
-  // 🔹 Navigation
-  const nextSlide = () => { currentSlide.value = (currentSlide.value + 1) % totalSlides; };
-  const prevSlide = () => { currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides; };
-  const togglePause = () => { isPaused.value = !isPaused.value; };
+onUnmounted(() => clearInterval(intervalId));
 
-  // 🔹 Auto-rotation
-  const startAutoRotate = () => {
-    clearInterval(intervalId);
-    intervalId = setInterval(() => {
-      if (!isPaused.value) nextSlide();
-    }, 20000);
-  };
-  onMounted(startAutoRotate);
-  onUnmounted(() => clearInterval(intervalId));
+// 🔹 Filters
+const uniqueCategories = computed(() =>
+  [...new Set(points.value.map(p => p.category).filter(Boolean))]
+);
+const uniqueCountries = computed(() =>
+  [...new Set(points.value.map(p => p.country?.trim() || p.Country?.trim() || '').filter(Boolean))]
+);
+const filteredPoints = computed(() =>
+  points.value.filter(p => {
+    const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
+    const matchCountry = selectedCountry.value ? p.country === selectedCountry.value : true;
+    return matchCategory && matchCountry;
+  })
+);
 
-  // ✅ Load both CSV files in one place
-  onMounted(async () => {
-    points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
-    articles.value = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
-  });
-
-  // 🔹 Filters
-  const uniqueCategories = computed(() =>
-    [...new Set(points.value.map(p => p.category).filter(Boolean))]
-  );
-  const uniqueCountries = computed(() =>
-    [...new Set(points.value.map(p => p.country?.trim() || p.Country?.trim() || '').filter(Boolean))]
-  );
-  const filteredPoints = computed(() =>
-    points.value.filter(p => {
-      const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
-      const matchCountry = selectedCountry.value ? p.country === selectedCountry.value : true;
-      return matchCategory && matchCountry;
-    })
-  );
-
-  // 🔹 Totals
-  const totalStudents = computed(() =>
-    filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
-  );
-  const totalFaculty = computed(() =>
-    filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
-  );
+// 🔹 Totals
+const totalStudents = computed(() =>
+  filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
+);
+const totalFaculty = computed(() =>
+  filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
+);
 </script>
 
-
 <style>
+/* ===========================
+   🔹 CUSTOM FONT
+=========================== */
+@font-face {
+  font-family: 'Mozilla Headline';
+  src: url('@/assets/fonts/MozillaHeadline-Regular.woff2') format('woff2'),
+       url('@/assets/fonts/MozillaHeadline-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ===========================
    🔹 TITLE TRANSITION
 =========================== */
@@ -387,15 +394,25 @@ const scrollArticles = (direction) => {
 /* ===========================
    🔹 FILTERS + TOTALS
 =========================== */
-.filters-section {
-  position: relative;
-  z-index: 5;
-  background: #fff;
-  width: 100%;
-  text-align: center;
-  padding: 20px 40px 40px;
-  margin-top: 0;
-  box-sizing: border-box;
+.filters-section select {
+  background: #F06C13;        /* Mozilla orange background */
+  color: #fff;                /* white text for contrast */
+  border: none;               /* cleaner look */
+  border-radius: 6px;
+  padding: 0.4em 0.6em;
+  cursor: pointer;
+  font-family: 'Mozilla Text', sans-serif;
+  font-weight: 600;
+  appearance: none;           /* remove default OS arrow style */
+  transition: background 0.3s ease;
+}
+.filters-section select:hover {
+  background: #d85d10;        /* slightly darker on hover */
+}
+
+.filters-section select:focus {
+  outline: 2px solid #000;    /* black outline for accessibility */
+  outline-offset: 2px;
 }
 .filters-section .filter-bar {
   display: flex;
@@ -409,19 +426,12 @@ const scrollArticles = (direction) => {
   font-weight: 600;
   color: #000;
 }
-.filters-section select {
-  background: #111;
-  color: #fff;
-  border: 1px solid #333;
-  border-radius: 6px;
-  padding: 0.4em 0.6em;
-  cursor: pointer;
-  font-family: 'Mozilla Text', sans-serif;
-}
 .filters-section .totals {
   color: #000;
   font-size: 16px;
   margin-top: 0.5rem;
+  text-align: center;       /* ✅ centers the text */
+  width: 100%;              /* ensures it spans full row */
 }
 
 /* ===========================
