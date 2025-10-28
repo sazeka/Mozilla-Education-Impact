@@ -78,13 +78,33 @@
                 class="carousel-item"
               >
                 <h3>{{ article.title }}</h3>
+
+                <!-- 🗓️ Date ABOVE image -->
                 <p class="article-date">
-                  {{ new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+                  {{ new Date(article.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }) }}
                 </p>
+
+                <!-- 🖼️ Image BELOW date -->
+                <img
+                  v-if="article.image"
+                  :src="article.image"
+                  :alt="article.title"
+                  class="article-image"
+                />
+                <img
+                  v-else
+                  src="https://via.placeholder.com/400x250?text=Article+Image"
+                  alt="Default placeholder"
+                  class="article-image"
+                />
+
                 <p>{{ article.summary }}</p>
                 <a :href="article.link" target="_blank" rel="noopener">Read more →</a>
               </div>
-
             </div>
 
             <button class="article-arrow right" @click="scrollArticles(1)">›</button>
@@ -461,17 +481,23 @@ const totalFaculty = computed(() =>
 .articles-section {
   position: relative;
   width: 100%;
-  padding: 40px;
+  padding: 20px 40px;        /* ✅ less vertical padding */
   display: flex;
-  align-items: center;
+  align-items: flex-start;   /* ✅ move content upward */
   justify-content: center;
+  min-height: 500px;         /* still enough height for cards */
+  box-sizing: border-box;
+  margin-top: -60px;         /* ✅ physically shifts it higher */
+  z-index: 1;
 }
+
 
 .article-date {
   font-size: 0.85rem;
   color: #555;
-  margin-bottom: 0.4rem;
+  margin: 0.1rem 0 0.3rem;
   font-style: italic;
+  line-height: 1.1;
 }
 
 .carousel-track {
@@ -502,15 +528,42 @@ const totalFaculty = computed(() =>
 .article-arrow.right { right: 10px; }
 
 .carousel-item {
-  flex: 0 0 250px;
+  flex: 0 0 280px;
   scroll-snap-align: start;
   background: #fff;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 1rem;
   color: #000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;             
+  box-sizing: border-box;
 }
+.carousel-item p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;      
+  -webkit-box-orient: vertical;
+}
+.carousel-item h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem; /* ✅ was probably 0.5–1rem */
+  color: #000;
+}
+.article-image {
+  width: 100%;
+  height: 150px;              
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  flex-shrink: 0;
+}
+
 
 
 /* ===========================
