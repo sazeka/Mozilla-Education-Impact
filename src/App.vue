@@ -124,7 +124,7 @@
             src="@/assets/Scribble_10_Light_RGB.png"
             alt="Pause/Play"
             class="pause-img"
-            :class="{ paused: isPaused }"
+            :class="{ paused: isPaused, pulsing: isPaused }"
           />
         </button>
 
@@ -221,6 +221,38 @@ const totalFaculty = computed(() =>
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+}
+
+/* ===========================
+   🔹 PAUSE ANIMATION
+=========================== */
+@keyframes pause-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* When paused, visually indicate state (your existing rule can stay) */
+.pause-img.paused {
+  filter: grayscale(100%) brightness(0.7);
+}
+
+/* Pulsing animation while paused */
+.pause-img.pulsing {
+  animation: pause-pulse 900ms ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Avoid hover scale fighting with the pulse */
+.pause-img.pulsing:hover {
+  transform: none;
+}
+
+/* Accessibility: respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pause-img.pulsing {
+    animation: none;
+  }
 }
 
 /* ===========================
