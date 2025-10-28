@@ -337,7 +337,7 @@ const scrollArticles = (direction) => {
 }
 
 .pause-img {
-  width: 64px;          /* Adjust size to match arrows */
+  width: 64px;         
   height: auto;
   opacity: 0.9;
   transition: transform 0.3s ease, opacity 0.3s ease;
