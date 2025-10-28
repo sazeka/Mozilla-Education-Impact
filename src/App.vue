@@ -97,7 +97,7 @@
                 />
                 <img
                   v-else
-                  src="/images/articles/default.jpg"
+                  src="/images/default.jpg"
                   alt="Default placeholder"
                   class="article-image"
                 />
