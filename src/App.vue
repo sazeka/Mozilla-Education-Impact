@@ -91,13 +91,13 @@
                 <!-- 🖼️ Image BELOW date -->
                 <img
                   v-if="article.image"
-                  :src="getImagePath(article.image)"
+                  :src="article.image"
                   :alt="article.title"
                   class="article-image"
                 />
                 <img
                   v-else
-                  src="@/assets/images/articles/default.jpg"
+                  src="/images/articles/default.jpg"
                   alt="Default placeholder"
                   class="article-image"
                 />
@@ -141,17 +141,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import InteractiveGlobe from './components/InteractiveGlobe.vue';
 import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
-
-// Dynamically resolve image paths from /src/assets/images/articles
-const getImagePath = (filename) => {
-  try {
-    // ✅ Vite handles assets using import.meta.url
-    return new URL(`/src/assets/images/articles/${filename}`, import.meta.url).href;
-  } catch (err) {
-    console.warn("Image not found:", filename);
-    return new URL(`/src/assets/images/articles/default.jpg`, import.meta.url).href;
-  }
-};
 
 // 🔹 Reactive state
 const currentSlide = ref(0);
