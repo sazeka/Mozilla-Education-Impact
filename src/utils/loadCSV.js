@@ -15,7 +15,7 @@ export async function loadCSV(filePath) {
 
   if (errors.length) console.warn("⚠️ CSV parse errors:", errors);
 
-  // ✅ Normalize headers
+  // ✅ Normalize headers to lowercase
   const normalizedData = data.map(row => {
     const normalized = {};
     for (const key in row) {
@@ -24,7 +24,7 @@ export async function loadCSV(filePath) {
     return normalized;
   });
 
-  // ✅ Special handling for university CSVs
+  // ✅ Handle university CSVs
   if (filePath.includes("universities")) {
     return normalizedData.map(item => ({
       name: item.name,
@@ -40,6 +40,18 @@ export async function loadCSV(filePath) {
     }));
   }
 
-  // ✅ For all other CSVs (like articles)
+  // ✅ Handle article CSVs
+  if (filePath.includes("articles")) {
+    return normalizedData.map(item => ({
+      title: item.title,
+      author: item.author || "", // 🆕 new field
+      date: item.date,
+      summary: item.summary,
+      image: item.image,
+      link: item.link,
+    }));
+  }
+
+  // ✅ Fallback for any other CSVs
   return normalizedData;
 }

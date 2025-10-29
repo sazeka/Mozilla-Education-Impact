@@ -16,9 +16,9 @@
       </div>
     </div>
 
-    <!-- 🔹 Carousel wrapper -->
+    <!-- 🔹 Carousel Wrapper -->
     <div class="carousel-wrapper">
-      <div class="carousel" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+      <div class="carousel" :style="{'--slide-index': currentSlide}">
         
         <!-- 🌍 Slide 1: Globe + Filters + Totals -->
         <div class="carousel-slide">
@@ -33,7 +33,11 @@
                 <label for="country">Filter by Country: </label>
                 <select id="country" v-model="selectedCountry">
                   <option value="">All</option>
-                  <option v-for="country in uniqueCountries" :key="country" :value="country">
+                  <option
+                    v-for="country in uniqueCountries"
+                    :key="country"
+                    :value="country"
+                  >
                     {{ country }}
                   </option>
                 </select>
@@ -44,7 +48,11 @@
                 <label for="category">Filter by Program: </label>
                 <select id="category" v-model="selectedCategory">
                   <option value="">All</option>
-                  <option v-for="category in uniqueCategories" :key="category" :value="category">
+                  <option
+                    v-for="category in uniqueCategories"
+                    :key="category"
+                    :value="category"
+                  >
                     {{ category }}
                   </option>
                 </select>
@@ -66,56 +74,60 @@
           </div>
         </div>
 
-        <!-- 📰 Slide 3: Articles -->
+        <!-- 📰 Slide 3: Articles + Timeline -->
         <div class="carousel-slide">
           <div class="articles-section">
-            <button class="article-arrow left" @click="scrollArticles(-1)">‹</button>
 
-            <div class="carousel-track" ref="articleTrack">
-              <div
-                v-for="(article, i) in articles"
-                :key="article.title + '_' + i"
-                class="carousel-item"
-              >
-                <h3>{{ article.title }}</h3>
+            <!-- 📰 Article Display -->
+            <div class="article-display" v-if="articles.length">
+              <!-- 🧩 Title -->
+              <h3>{{ currentArticle.title }}</h3>
 
-                <!-- 🗓️ Date ABOVE image -->
-                <p class="article-date">
-                  {{ new Date(article.date).toLocaleDateString('en-US', {
+              <!-- ✍️ Author line -->
+              <p class="article-author" v-if="currentArticle.author">
+                By {{ currentArticle.author }}
+              </p>
+
+              <!-- 🗓️ Date -->
+              <p class="article-date">
+                {{
+                  new Date(currentArticle.date).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-                  }) }}
-                </p>
+                  })
+                }}
+              </p>
 
-                <!-- 🖼️ Image BELOW date -->
-                <img
-                  v-if="article.image"
-                  :src="article.image"
-                  :alt="article.title"
-                  class="article-image"
-                />
-                <img
-                  v-else
-                  src="/images/default.jpg"
-                  alt="Default placeholder"
-                  class="article-image"
-                />
-                <p>{{ article.summary }}</p>
-                <a :href="article.link" target="_blank" rel="noopener">Read more →</a>
-              </div>
+              <!-- 🧾 Summary -->
+              <p>{{ currentArticle.summary }}</p>
+
+              <!-- 🔗 Read more -->
+              <a :href="currentArticle.link" target="_blank" rel="noopener">Read more →</a>
             </div>
 
-            <button class="article-arrow right" @click="scrollArticles(1)">›</button>
+
+            <!-- 🕒 Timeline Centered Below -->
+            <div class="timeline-wrapper">
+              <ArticleTimeline
+                :articles="articles"
+                :currentArticleIndex="currentArticleIndex"
+                @select-article="setCurrentArticle"
+              />
+            </div>
+
           </div>
         </div>
-
-      </div> <!-- ✅ closes .carousel -->
+      </div>
 
       <!-- 🔹 Carousel Controls -->
       <div class="carousel-controls">
         <button @click="prevSlide" class="arrow-btn left">
-          <img src="@/assets/Scribble_02_Light_RGB.png" alt="Previous" class="arrow-img" />
+          <img
+            src="@/assets/Scribble_02_Light_RGB.png"
+            alt="Previous"
+            class="arrow-img"
+          />
         </button>
 
         <button @click="togglePause" class="pause-btn">
@@ -128,47 +140,63 @@
         </button>
 
         <button @click="nextSlide" class="arrow-btn right">
-          <img src="@/assets/Scribble_01_Light_RGB.png" alt="Next" class="arrow-img" />
+          <img
+            src="@/assets/Scribble_01_Light_RGB.png"
+            alt="Next"
+            class="arrow-img"
+          />
         </button>
       </div>
-    </div> <!-- ✅ closes .carousel-wrapper -->
-  </div> <!-- ✅ closes root div -->
+    </div>
+  </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import InteractiveGlobe from './components/InteractiveGlobe.vue';
 import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
+import ArticleTimeline from "@/components/ArticleTimeline.vue";
 
-// 🔹 Reactive state
+/* ────────────────
+   Reactive State
+──────────────── */
 const currentSlide = ref(0);
 const totalSlides = 3;
 const isPaused = ref(false);
 let intervalId = null;
 
-// 🔹 Data
+/* ────────────────
+   Data
+──────────────── */
 const points = ref([]);
 const articles = ref([]);
 const selectedCategory = ref('');
 const selectedCountry = ref('');
 
-// 🔹 Navigation
-const nextSlide = () => { currentSlide.value = (currentSlide.value + 1) % totalSlides; };
-const prevSlide = () => { currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides; };
-const togglePause = () => { isPaused.value = !isPaused.value; };
+const currentArticleIndex = ref(0);
+const currentArticle = computed(() => articles.value[currentArticleIndex.value] || {});
 
-// 🔹 Article scroll
-const articleTrack = ref(null);
-const scrollArticles = (direction) => {
-  if (articleTrack.value) {
-    const scrollAmount = 300;
-    articleTrack.value.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
-  }
+function setCurrentArticle(index) {
+  currentArticleIndex.value = index;
+}
+
+/* ────────────────
+   Navigation
+──────────────── */
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % totalSlides;
+};
+const prevSlide = () => {
+  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides;
+};
+const togglePause = () => {
+  isPaused.value = !isPaused.value;
 };
 
-// 🔹 Auto-rotation
+/* ────────────────
+   Auto-rotation
+──────────────── */
 const startAutoRotate = () => {
   clearInterval(intervalId);
   intervalId = setInterval(() => {
@@ -176,31 +204,70 @@ const startAutoRotate = () => {
   }, 10000);
 };
 
-// ✅ Merge data loading + auto-rotation
-onMounted(async () => {
-  points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
-  articles.value = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
-  startAutoRotate(); // start after data is loaded
-});
-
 onUnmounted(() => clearInterval(intervalId));
 
-// 🔹 Filters
+/* ────────────────
+   CSV Loading + Cleaning
+──────────────── */
+onMounted(async () => {
+  points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
+  const rawArticles = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
+
+  // 🧹 Clean article summaries that repeat their title
+  articles.value = rawArticles.map(a => {
+    const title = (a.title || '').trim();
+    let summary = (a.summary || '').trim();
+
+    const t = title.toLowerCase();
+    const s = summary.toLowerCase();
+
+    // handle variants like "Title:", "Title -", "Title—", etc.
+    if (
+      s.startsWith(t) ||
+      s.startsWith(t + ':') ||
+      s.startsWith(t + ' -') ||
+      s.startsWith(t + ' —') ||
+      s.startsWith(t + '–') ||
+      s.startsWith(t + ' —') ||
+      s.startsWith(t + ' — ')
+    ) {
+      summary = summary
+        .slice(title.length)
+        .replace(/^[:\-\s–—]+/, '')
+        .trim();
+    }
+
+    return { ...a, summary };
+  });
+
+  startAutoRotate();
+});
+
+/* ────────────────
+   Filters + Totals
+──────────────── */
 const uniqueCategories = computed(() =>
   [...new Set(points.value.map(p => p.category).filter(Boolean))]
 );
 const uniqueCountries = computed(() =>
-  [...new Set(points.value.map(p => p.country?.trim() || p.Country?.trim() || '').filter(Boolean))]
+  [...new Set(
+    points.value.map(p => p.country?.trim() || p.Country?.trim() || '')
+      .filter(Boolean)
+  )]
 );
+
 const filteredPoints = computed(() =>
   points.value.filter(p => {
-    const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
-    const matchCountry = selectedCountry.value ? p.country === selectedCountry.value : true;
+    const matchCategory = selectedCategory.value
+      ? p.category === selectedCategory.value
+      : true;
+    const matchCountry = selectedCountry.value
+      ? p.country === selectedCountry.value
+      : true;
     return matchCategory && matchCountry;
   })
 );
 
-// 🔹 Totals
 const totalStudents = computed(() =>
   filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
 );
@@ -208,6 +275,7 @@ const totalFaculty = computed(() =>
   filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
 );
 </script>
+
 
 <style>
 /* ===========================
@@ -220,38 +288,6 @@ const totalFaculty = computed(() =>
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
-
-/* ===========================
-   🔹 PAUSE ANIMATION
-=========================== */
-@keyframes pause-pulse {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
-/* When paused, visually indicate state (your existing rule can stay) */
-.pause-img.paused {
-  filter: grayscale(100%) brightness(0.7);
-}
-
-/* Pulsing animation while paused */
-.pause-img.pulsing {
-  animation: pause-pulse 900ms ease-in-out infinite;
-  transform-origin: center center;
-}
-
-/* Avoid hover scale fighting with the pulse */
-.pause-img.pulsing:hover {
-  transform: none;
-}
-
-/* Accessibility: respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .pause-img.pulsing {
-    animation: none;
-  }
 }
 
 /* ===========================
@@ -271,7 +307,7 @@ const totalFaculty = computed(() =>
 }
 
 /* ===========================
-   🔹 TITLE STYLES
+   🔹 TOP SECTION / TITLES
 =========================== */
 .top-section {
   position: relative;
@@ -304,117 +340,51 @@ const totalFaculty = computed(() =>
 /* ===========================
    🔹 CAROUSEL CORE
 =========================== */
+/* --- core carousel geometry --- */
 .carousel-wrapper {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
   background: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
+
 .carousel {
   display: flex;
-  width: 300%;
-  height: 100%;
   transition: transform 0.8s ease-in-out;
+  width: 100%;                 /* container width handled by slides */
+  height: 100%;
 }
+
 .carousel-slide {
-  width: 100%;
-  flex-shrink: 0;
+  flex: 0 0 100%;              /* each slide = full wrapper width  */
+  height: 100%;                /* fill vertical space               */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
-  padding-top: 40px;
-}
-.carousel-slide:nth-child(1),
-.carousel-slide:nth-child(2),
-.carousel-slide:nth-child(3) {
-  background: #fff;
-}
-.carousel-slide > * {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  box-sizing: border-box;
 }
 
+/* this keeps the translation math correct */
+.carousel-wrapper > .carousel {
+  transform: translateX(calc(-100% * var(--slide-index, 0)));
+}
 /* ===========================
-   🔹 CONTROLS (Visible + Fixed)
+   🔹 PAUSE BUTTON ANIMATION
 =========================== */
-.carousel-controls {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 1.5rem;
-  z-index: 50;
-}
-.carousel-controls button {
-  background: none;          /* remove circle background */
-  color: #000;               /* change text color if needed */
-  border: none;              /* remove border */
-  padding: 0;                /* remove padding around arrows */
-  font-size: 1.8rem;
-  border-radius: 0;          /* remove rounded shape */
-  cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  backdrop-filter: none;     /* remove blur effect */
+@keyframes pause-pulse {
+  0%   { transform: scale(1); opacity: 0.9; }
+  50%  { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
 }
 
-.carousel-controls button:hover {
-  background: none;          /* keep transparent on hover */
-  transform: scale(1.1);
+/* Apply when paused */
+.pause-img.pulsing {
+  animation: pause-pulse 1.2s ease-in-out infinite;
+  transform-origin: center center;
 }
 
-.arrow-img {
-  width: 64px;       /* size of the arrow images */
-  height: auto;
-  object-fit: contain;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0.9;
-}
-
-.arrow-btn.right:hover .arrow-img {
-  transform: scale(1.1) rotate(3deg);
-  opacity: 1;
-}
-
-.pause-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pause-img {
-  width: 64px;         
-  height: auto;
-  opacity: 0.9;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.pause-img:hover {
-  transform: scale(1.15);
-  opacity: 1;
-}
-
-.pause-img.paused {
-  filter: grayscale(100%) brightness(0.7); /* visually indicate paused state */
-}
-
-@media (max-width: 900px) {
-  .arrow-img {
-    width: 48px;   /* smaller on tablets/phones */
-  }
-}
 /* ===========================
    🔹 GLOBE SECTION
 =========================== */
@@ -429,41 +399,38 @@ const totalFaculty = computed(() =>
   height: 45vh;
   max-height: 400px;
   min-height: 280px;
-  margin-top: 30px;
-  overflow: hidden;
   box-sizing: border-box;
 }
 .globe-section canvas {
   width: 100% !important;
   height: 100% !important;
-  max-width: 800px;
-  max-height: 400px;
   object-fit: contain;
-  display: block;
 }
 
 /* ===========================
    🔹 FILTERS + TOTALS
 =========================== */
+.filters-section {
+  margin-top: 1rem;
+  text-align: center;
+}
 .filters-section select {
-  background: #F06C13;        /* Mozilla orange background */
-  color: #fff;                /* white text for contrast */
-  border: none;               /* cleaner look */
+  background: #F06C13;
+  color: #fff;
+  border: none;
   border-radius: 6px;
   padding: 0.4em 0.6em;
   cursor: pointer;
   font-family: 'Mozilla Text', sans-serif;
   font-weight: 600;
-  appearance: none;           /* remove default OS arrow style */
   transition: background 0.3s ease;
 }
 .filters-section select:hover {
-  background: #d85d10;        /* slightly darker on hover */
+  background: #d85d10;
 }
-
-.filters-section select:focus {
-  outline: 2px solid #000;    /* black outline for accessibility */
-  outline-offset: 2px;
+.filters-section label {
+  font-weight: 600;
+  color: #000;
 }
 .filters-section .filter-bar {
   display: flex;
@@ -473,16 +440,10 @@ const totalFaculty = computed(() =>
   flex-wrap: wrap;
   margin-bottom: 0.75rem;
 }
-.filters-section label {
-  font-weight: 600;
-  color: #000;
-}
 .filters-section .totals {
   color: #000;
   font-size: 16px;
   margin-top: 0.5rem;
-  text-align: center;       /* ✅ centers the text */
-  width: 100%;              /* ensures it spans full row */
 }
 
 /* ===========================
@@ -492,9 +453,9 @@ const totalFaculty = computed(() =>
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;   /* ✅ center vertically */
-  padding: 0 40px;       /* ✅ remove top/bottom padding */
-  margin-top: -40px;     /* ✅ lift it higher in its slide */
+  align-items: flex-start;   /* ✅ start closer to top instead of centered */
+  padding-top: 40px;         /* ✅ a bit of breathing space from the title */
+  padding-bottom: 20px;
   box-sizing: border-box;
 }
 
@@ -510,91 +471,106 @@ const totalFaculty = computed(() =>
    🔹 ARTICLES SECTION
 =========================== */
 .articles-section {
-  position: relative;
-  width: 100%;
-  padding: 20px 40px;        /* ✅ less vertical padding */
-  display: flex;
-  align-items: flex-start;   /* ✅ move content upward */
-  justify-content: center;
-  min-height: 500px;         /* still enough height for cards */
-  box-sizing: border-box;
-  margin-top: -60px;         /* ✅ physically shifts it higher */
-  z-index: 1;
-}
-
-
-.article-date {
-  font-size: 0.85rem;
-  color: #555;
-  margin: 0.1rem 0 0.3rem;
-  font-style: italic;
-  line-height: 1.1;
-}
-
-.carousel-track {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 2rem;
-  scroll-behavior: smooth;
-  padding: 1rem;
-  width: 100%;
-  max-width: 1000px;
-}
-
-.article-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: #000;
-  cursor: pointer;
-  z-index: 10;
-  transition: opacity 0.3s;
-}
-.article-arrow:hover { opacity: 0.7; }
-.article-arrow.left { left: 10px; }
-.article-arrow.right { right: 10px; }
-
-.carousel-item {
-  flex: 0 0 280px;
-  scroll-snap-align: start;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 1rem;
-  color: #000;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  height: 420px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: flex-start;
-  overflow: hidden;             
+  width: 100%;
+  padding: 40px;
   box-sizing: border-box;
 }
-.carousel-item p {
+.article-display {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.article-display p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;   /* ✅ number of visible lines */
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;      
-  -webkit-box-orient: vertical;
+  line-height: 1.4;
+  max-height: calc(1.4em * 3); /* matches line count for fallback */
 }
-.carousel-item h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.2rem; /* ✅ was probably 0.5–1rem */
-  color: #000;
+.article-display h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+.article-display a {
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+.article-date {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  font-style: italic;
 }
 .article-image {
   width: 100%;
-  aspect-ratio: 16 / 9;    
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: 8px;
-  margin: 0.5rem 0;
-  display: block;
+  margin: 0.5rem 0 1rem;
+}
+.timeline-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+.article-author {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0.3rem 0;
+  font-style: italic;
 }
 
+
+/* ===========================
+   🔹 TIMELINE CONTAINER
+=========================== */
+.timeline-container {
+  overflow-x: auto !important;
+  scroll-snap-type: none !important;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   🔹 CAROUSEL CONTROLS
+=========================== */
+.carousel-controls {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.5rem;
+  z-index: 50;
+}
+.carousel-controls button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.arrow-img,
+.pause-img {
+  width: 64px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.arrow-btn:hover .arrow-img,
+.pause-img:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
 
 /* ===========================
    🔹 RESPONSIVE
@@ -602,10 +578,9 @@ const totalFaculty = computed(() =>
 @media (max-width: 900px) {
   .page-title { font-size: 28px; }
   .carousel-controls { bottom: 20px; gap: 1rem; }
-  .carousel-controls button { font-size: 1.5rem; padding: 0.5em 1em; }
   .filters-section { padding: 20px; }
-  .filters-section .filter-bar { flex-direction: column; gap: 10px; }
   .video-section { padding: 20px; }
   .articles-section { padding: 20px; }
 }
+
 </style>
