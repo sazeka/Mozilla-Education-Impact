@@ -8,15 +8,15 @@ University of Embu,-0.5303,37.4575,Growing institution in Embu.,100,9,Kenya,Resp
 Riara University,-1.3027,36.7848,Private university in Nairobi.,188,9,Kenya,Responsible Computing Challenge,Prof Felix Musau,RAPID Computing Using Problem-Based Learning Approach
 Jomo Kenyatta University of Agriculture and Technology,-1.1012,37.012,Tech-focused university in Juja.,112,6,Kenya,Responsible Computing Challenge,Dr Eunice Njeri,Teaching Responsible Computing using Robotics
 Kisii University,-0.6817,34.7652,Public university in Kisii County.,215,8,Kenya,Responsible Computing Challenge,Dr Fredrick Awuor,Ethical AI
-Marian College Kuttikkanam Autonomous,9.6027,76.9935,"Autonomous college in Kerala, India.",217,7,India,Responsible Computing Challenge,,
-IIT Indore,22.5215,75.9235,Indian Institute of Technology in Indore.,12,1,India,Responsible Computing Challenge,,
-Ashoka University,28.9405,77.6368,Private liberal arts university in Haryana.,165,3,India,Responsible Computing Challenge,,
-IIT Guwahati,26.1878,91.6911,"Leading IIT in Assam, India.",0,4,India,Responsible Computing Challenge,,
-Shri Vile Parle Kelavani Mandalâ€™s Dwarkadas J. Sanghvi College of Engineering,19.1034,72.8366,Private engineering college in Mumbai.,179,5,India,Responsible Computing Challenge,,
-NIT Warangal,17.9784,79.5941,National Institute of Technology in Telangana.,180,3,India,Responsible Computing Challenge,,
-IIIT Kottayam,9.6431,76.7798,Indian Institute of Information Technology in Kerala.,117,5,India,Responsible Computing Challenge,,
-CHRIST (Deemed to be University),12.9352,77.6068,Major private university in Bengaluru.,450,7,India,Responsible Computing Challenge,,
-"Kerala University of Digital Sciences, Innovation and Technology",8.556,76.8812,New digital university in Kerala.,0,4,India,Responsible Computing Challenge,,
+Marian College Kuttikkanam Autonomous,9.6027,76.9935,"Autonomous college in Kerala, India.",217,7,India,Responsible Computing Challenge,"Nisha Jose, Ajesh Parackal, Binu Thomas",Certificate Program in Equitable Digital Access for People with Disability
+IIT Indore,22.5215,75.9235,Indian Institute of Technology in Indore.,12,1,India,Responsible Computing Challenge,Gowrinath Banda,"Enabling Inclusive, Energy-Aware, and Formally Correct Computing: A Holistic Approach to Responsible System Development"
+Ashoka University,28.9405,77.6368,Private liberal arts university in Haryana.,165,3,India,Responsible Computing Challenge,Debayan Gupta,The New Geography of the Information Age
+IIT Guwahati,26.1878,91.6911,"Leading IIT in Assam, India.",0,4,India,Responsible Computing Challenge,"Priyankoo Sarmah,  Prabir Barooah",Bringing Environmental Awareness into Undergraduate Education in North-East India by Incorporating Computational Acoustic Ecology
+Shri Vile Parle Kelavani Mandalâ€™s Dwarkadas J. Sanghvi College of Engineering,19.1034,72.8366,Private engineering college in Mumbai.,179,5,India,Responsible Computing Challenge,"Print Bari, Swapneel Mehta",SimPPL: A Research Program for Indian Undergraduates from Underserved
+NIT Warangal,17.9784,79.5941,National Institute of Technology in Telangana.,180,3,India,Responsible Computing Challenge,Spoorthi B,CLILuminating Changemakers Project
+IIIT Kottayam,9.6431,76.7798,Indian Institute of Information Technology in Kerala.,117,5,India,Responsible Computing Challenge,"Ebin Deni Raj, Arun Cyril Jose",A course on Understanding Diversity implication offered to CSE students from a sociology perspective to gain insights on Fairness Accountability and Transparency of algorithms.
+CHRIST (Deemed to be University),12.9352,77.6068,Major private university in Bengaluru.,450,7,India,Responsible Computing Challenge,"Surya Kiran, Muskaan",Integrating Ethics in Technical Communication: Redefining English Language Pedagogy for the Students of Technology in India
+"Kerala University of Digital Sciences, Innovation and Technology",8.556,76.8812,New digital university in Kerala.,0,4,India,Responsible Computing Challenge,Anoop V S,"Integration of Modules on ""Responsible NLP"" into Existing Natural Language Processing Course for Computing Students using Flipped Classroom Strategies and Outreach Components"
 University of Cape Town,-33.957,18.4607,Embedding conceptual tools for ethical engagement in technical engineering content,0,0,South Africa,Responsible Computing Challenge,,
 University of Witwatersrand,-26.1929,28.03,Leading research university in Johannesburg.,0,0,South Africa,Responsible Computing Challenge,,
 "Central University of Technology, Free State",-29.1183,26.214,Tech university in Bloemfontein.,0,0,South Africa,Responsible Computing Challenge,,
@@ -24,10 +24,35 @@ University of Pretoria,-25.7545,28.2314,One of the largest universities in South
 University of Fort Hare,-32.7869,26.8336,Historic institution in Alice.,0,0,South Africa,Responsible Computing Challenge,,
 Durban University of Technology,-29.8532,30.9257,Multicampus university in Durban.,0,0,South Africa,Responsible Computing Challenge,,
 Sol Plaatje University,-28.7382,24.7636,New public university in Kimberley.,0,0,South Africa,Responsible Computing Challenge,,
-Harvard College,42.377,-71.1167,"Oldest university in the US, in Massachusetts.",5811,9,United States,Responsible Computing Challenge,,
-Prairie View A&M University,30.0955,-95.986,Historically Black university in Texas.,140,6,United States,Responsible Computing Challenge,,
-University of Washington,47.6553,-122.3035,Large public research university in Seattle.,704,82,United States,Responsible Computing Challenge,,
-University of Michigan,42.278,-83.7382,Top public university in Michigan.,51,6,United States,Responsible Computing Challenge,,
-University of Notre Dame,41.7034,-86.2386,Private Catholic research university in Indiana.,100,11,United States,Responsible Computing Challenge,,
-Howard University,38.9226,-77.019,"Historic HBCU in Washington, D.C.",154,5,United States,Responsible Computing Challenge,,
-Adelphi University,40.7209,-73.6524,Private university in New York.,40,500,United States,Responsible Computing Challenge,Dr Suraj Uttamchandani,Spatial Justice as a Bridge to Responsible Computing
+Allegheny College,41.64869,-80.147168,,751,55,United States,Responsible Computing Challenge,Oliver Bonham-Carter,Allegheny Ethical CS Initiative
+Bemidji State University,47.48175,-94.875569,,1815,2,United States,Responsible Computing Challenge,"Marty J. Wolf, Colleen Greer",Responsible CS through engaged and effective collaboration
+Bowdoin College,43.907867,-69.96344,,464,3,United States,Responsible Computing Challenge,Allison Cooper,Computing Ethics Narratives
+Columbia University In The City Of New York,40.807384,-73.963036,,1040,28,United States,Responsible Computing Challenge,Augustin Chaintreau,Launching the Computing Ethics Companion Series to complement widely used CS
+Georgetown University,38.907852,-77.072807,,387,20,United States,Responsible Computing Challenge,Nitin Vaidya,Infusing Ethics into CS Curricula Using Design-Based Pedagogy
+Georgia Institute of Technology,33.7722,-84.3902,,600,6,United States,Responsible Computing Challenge,Ellen Zegura,Rewiring Computer Science Mindset
+Harvard College,42.374443,-71.116943,,5811,9,United States,Responsible Computing Challenge,Barbara Grosz,Embedded EthiCS: Module Design and Teaching Materials for Core CS Courses
+Miami Dade College,25.8652,-80.3183,,760,,United States,Responsible Computing Challenge,Antonio Delgado,Integration of Responsible Computing at the NationÕs Largest College
+Northeastern University,42.3367,-71.0886,,1145,16,United States,Responsible Computing Challenge,Christo Wilson,Integrating Value Sensitive Design Training Throughout the CS Curriculum
+Santa Clara University,37.3428,-121.9362,,600,,United States,Responsible Computing Challenge,"Sukanya Manna, Shiva Houshmand, Vincent",Furthering the Integration of Ethics into the CS & CE Core Curriculum at Santa Clara
+University at Buffalo,43.0024,-78.7887,,3298,10,United States,Responsible Computing Challenge,Atri Rudra,Ethics in CS Education as a first principle and not an afterthought
+UC Berkeley,37.87196,-122.259094,,6150,24,United States,Responsible Computing Challenge,"James Demmel, Cathryn Carson",Computer Science / Data Science in Human Context
+UC Davis,38.5373,-121.75,,125,,United States,Responsible Computing Challenge,"Annamaria (Nina) Amenta, Gerardo Con D’az, and Xin Liu",
+University of Colorado,40.003999,-105.267,,1000,7,United States,Responsible Computing Challenge,Casey Fiesler,"Professional, Integrity, Diversity and inclusivity in Computing)"
+"University of Maryland, Baltimore County",39.2533,-76.7068,,240,,United States,Responsible Computing Challenge,Helena Mentis,A Peer-led Team Learning Framework for Ethics in Computing
+University of Utah,40.759,-111.85,,1800,18,United States,Responsible Computing Challenge,"Suresh Venkatasubramanian, Sorelle A. Friedler (Haverford College), Seny Kamara (Brown University)",Responsible Problem-solving: Focusing on the societal consequences of design choices
+University of Washington,47.655548,-122.3032,,504,75,United States,Responsible Computing Challenge,Ron Cytron,Exploring ethics and responsibility in collaborative student work
+Bucknell University,40.9546,-76.8836,,325,6,United States,Responsible Computing Challenge,,Building a Just Computing Movement: Integrating curricular and co-curricular experiences.
+Howard University,38.9197,-77.0187,,154,5,United States,Responsible Computing Challenge,,De-Biasing Data in AI Computation: A Model for Socially-Culturally Responsible Data Interpretation
+Michigan State University,42.725,-84.48,,79,4,United States,Responsible Computing Challenge,,Reimagining Information Communication Technology and Development (ICTD): Developing and Implementing an African-Informed Approach to Global Technology Design
+Northeastern University,42.3367,-71.0886,,9000,5,United States,Responsible Computing Challenge,,Summer Training Program on Responsible Computing Education
+Prairie View A&M University,30.0919,-95.9894,,140,6,United States,Responsible Computing Challenge,,Considering Rural Communities and Issues through Socially Responsible Computing
+San JosŽ State University,37.3352,-121.8811,,1300,8,United States,Responsible Computing Challenge,,CIRCLE: Cross-campus Interdisciplinary Responsible Computing Learning Experiences
+Stillman College,32.516,-87.7489,,3425,5,United States,Responsible Computing Challenge,,Building a Responsible Computing Network among HBCUs
+University at Buffalo,43.0024,-78.7887,,100,11,United States,Responsible Computing Challenge,,"The impossible is the least we can demand:"" Social Justice and Computing"
+UC Berkeley,37.87196,-122.259094,,14400,18,United States,Responsible Computing Challenge,,Educational Ecosystem for Responsible Computing
+University of Michigan,42.278,-83.7382,,51,6,United States,Responsible Computing Challenge,,Crip Computing: On Access Histories and Access Futures
+University of Notre Dame,41.7032,-86.2383,,100,11,United States,Responsible Computing Challenge,,Educational Ecosystem for Responsible Computing
+University of Pennsylvania,39.9522,-75.1932,,172,4,United States,Responsible Computing Challenge,,Responsible Computing & Justice Fellows
+University of Washington,47.655548,-122.3032,,200,7,United States,Responsible Computing Challenge,,Responsible Datasets in Context: Collaboratively Designing for Ethical Humanities Data Education
+Winston-Salem State University,36.101,-80.2449,,160,11,United States,Responsible Computing Challenge,,Integrating AI Ethics Modules into interdisciplinary courses at an HBCU
+Adelphi University,40.7202,-73.6517,,40,3,United States,Responsible Computing Challenge,,Spatial Justice as a Bridge to Responsible Computing
