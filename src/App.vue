@@ -449,10 +449,12 @@ const totalFaculty = computed(() =>
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 40px;
-  padding-bottom: 20px;
+  padding-top: 10px;        /* ↓ was 40px — brings video closer to title */
+  padding-bottom: 10px;     /* less vertical space below */
+  margin-top: -40px;        /* ✅ lifts the section up further */
   box-sizing: border-box;
 }
+
 .video-container {
   width: 85%;
   max-width: 1000px;
@@ -460,6 +462,7 @@ const totalFaculty = computed(() =>
   justify-content: center;
   align-items: center;
 }
+
 
 /* ===========================
    🔹 ARTICLES SECTION
