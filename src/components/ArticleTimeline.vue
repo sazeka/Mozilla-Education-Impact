@@ -91,10 +91,14 @@ watch(
 }
 
 .timeline-card.active {
-  background: #2563eb;
+  background: #23A5E9;
   color: #fff;
   border-color: #2563eb;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(35, 165, 233, 0.4); 
+}
+
+.timeline-card.active .timeline-dot {
+  background-color: #ffffff;
 }
 
 /* ===========================
