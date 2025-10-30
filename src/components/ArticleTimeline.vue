@@ -45,13 +45,29 @@ watch(
 =========================== */
 .timeline-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 0.75rem 0;
+  padding: 0.75rem 1rem;  
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  box-sizing: border-box;
+}
+.timeline-card:first-child {
+  margin-left: 0.5rem;
+}
+
+.timeline-card:last-child {
+  margin-right: 0.5rem;
+}
+
+.timeline-container {
+  scroll-snap-type: x mandatory;
+}
+
+.timeline-card {
+  scroll-snap-align: start; /* ✅ makes each card snap fully into view */
 }
 
 .timeline-scroll {

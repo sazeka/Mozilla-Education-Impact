@@ -189,7 +189,7 @@ const currentArticleIndex = ref(0);
 
 /* ✅ Sort articles chronologically (shared by display + timeline) */
 const sortedArticles = computed(() =>
-  [...articles.value].sort((a, b) => new Date(a.date) - new Date(b.date))
+  [...articles.value].sort((a, b) => new Date(b.date) - new Date(a.date))
 );
 
 /* ✅ Use sorted list for the displayed article */
