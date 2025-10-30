@@ -83,10 +83,15 @@
               <div class="timeline-sidebar">
               <!-- 🔹 Legend stays visible -->
               <div class="article-key">
-                <div class="key-item news"><span class="color-box"></span> News</div>
-                <div class="key-item blog"><span class="color-box"></span> Blog</div>
-                <div class="key-item event"><span class="color-box"></span> Event</div>
-                <div class="key-item conference"><span class="color-box"></span> Conference</div>
+                <div
+                  v-for="type in articleTypes"
+                  :key="type.value"
+                  class="key-item"
+                  :class="[type.value, { active: selectedType === type.value }]"
+                  @click="toggleTypeFilter(type.value)"
+                >
+                  <span class="color-box"></span> {{ type.label }}
+                </div>
               </div>
 
               <!-- 🔹 Only this wrapper scrolls -->
@@ -171,6 +176,23 @@ import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
 import ArticleTimeline from "@/components/ArticleTimeline.vue";
 
+// 🔹 Article type filter
+const selectedType = ref(""); // none selected by default
+
+// 🔹 Available article types for the key
+const articleTypes = [
+  { value: "news", label: "News" },
+  { value: "blog", label: "Blogs" },
+  { value: "event", label: "Events" },
+  { value: "conference", label: "Conferences" },
+];
+
+// 🔹 Toggle filter function
+function toggleTypeFilter(type) {
+  selectedType.value = selectedType.value === type ? "" : type;
+}
+
+
 /* ────────────────
    Reactive State
 ──────────────── */
@@ -186,13 +208,16 @@ const points = ref([]);
 const articles = ref([]);
 const selectedCategory = ref("");
 const selectedCountry = ref("");
-
 const currentArticleIndex = ref(0);
 
-/* ✅ Sort articles chronologically (shared by display + timeline) */
-const sortedArticles = computed(() =>
-  [...articles.value].sort((a, b) => new Date(b.date) - new Date(a.date))
-);
+const sortedArticles = computed(() => {
+  let list = [...articles.value].sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (selectedType.value) {
+    list = list.filter(a => a.type === selectedType.value);
+  }
+  return list;
+});
+
 
 /* ✅ Use sorted list for the displayed article */
 const currentArticle = computed(
@@ -508,11 +533,22 @@ const totalFaculty = computed(() =>
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  cursor: pointer;
   font-weight: 500;
-  color: #111;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-/* Small colored box for each type */
+.key-item:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.key-item.active {
+  outline: 2px solid #2563eb;
+  border-radius: 8px;
+  padding: 0.2rem 0.4rem;
+}
+
 .color-box {
   width: 20px;
   height: 20px;
@@ -522,33 +558,22 @@ const totalFaculty = computed(() =>
 
 /* Match new timeline colors */
 .key-item.news .color-box {
-  background-color: #FF9E5F; /* News: orange */
+  background-color: #FF9E5F;
   border-color: #FF9E5F;
 }
 .key-item.blog .color-box {
-  background-color: #FFFF6C; /* Blog: yellow */
+  background-color: #FFFF6C;
   border-color: #FFFF6C;
 }
 .key-item.event .color-box {
-  background-color: #86FF81; /* Event: green */
+  background-color: #86FF81;
   border-color: #86FF81;
 }
 .key-item.conference .color-box {
-  background-color: #7DEDF6; /* Conference: light blue */
+  background-color: #7DEDF6;
   border-color: #7DEDF6;
 }
 
-/* Responsive adjustments */
-@media (max-width: 700px) {
-  .article-key {
-    gap: 0.8rem 1rem;
-    font-size: 0.85rem;
-  }
-  .color-box {
-    width: 16px;
-    height: 16px;
-  }
-}
 
 /* ===========================
    🔹 ARTICLES SECTION
