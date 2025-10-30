@@ -81,18 +81,34 @@
             <div class="articles-layout" v-if="sortedArticles.length">
               <!-- 🕒 Timeline Sidebar -->
               <div class="timeline-sidebar">
+              <!-- 🔹 Legend stays visible -->
+              <div class="article-key">
+                <div class="key-item news"><span class="color-box"></span> News</div>
+                <div class="key-item blog"><span class="color-box"></span> Blog</div>
+                <div class="key-item event"><span class="color-box"></span> Event</div>
+                <div class="key-item conference"><span class="color-box"></span> Conference</div>
+              </div>
+
+              <!-- 🔹 Only this wrapper scrolls -->
+              <div class="timeline-scroll-wrapper">
                 <ArticleTimeline
                   :articles="sortedArticles"
                   :currentArticleIndex="currentArticleIndex"
                   @select-article="setCurrentArticle"
                 />
               </div>
+            </div>
+
+
 
               <!-- 📰 Main Article Display -->
               <div class="article-display">
                 <h3>{{ currentArticle.title }}</h3>
                 <p class="article-author" v-if="currentArticle.author">
                   By {{ currentArticle.author }}
+                </p>
+                <p class="article-publication" v-if="currentArticle.publication">
+                  Published in {{ currentArticle.publication }}
                 </p>
                 <p class="article-date">
                   {{
@@ -227,6 +243,15 @@ onMounted(async () => {
   const summaryRaw = (a.summary || "").trim();
   const regex = new RegExp(`^${title}[\\s:–—-]*`, "i");
   const summary = summaryRaw.replace(regex, "").trim();
+  
+  // ✅ Normalize and fix the type
+  let cleanType = (a.type || "").trim().toLowerCase();
+  if (cleanType === "confrence") cleanType = "conference"; // fix typo
+  if (cleanType === "event" || cleanType === "news" || cleanType === "blog" || cleanType === "conference") {
+    // valid
+  } else {
+    cleanType = ""; // fallback if CSV had junk
+  }
 
   return {
     title,
@@ -234,7 +259,8 @@ onMounted(async () => {
     date: a.date,
     summary,
     link: a.link,
-    publication: a.publication?.trim() || "", // ✅ renamed
+    publication: a.publication?.trim() || "",
+    type: cleanType,
   };
 });
 
@@ -350,8 +376,13 @@ const totalFaculty = computed(() =>
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
-  background: #fff;
+  overflow: hidden; /* keep the viewport fixed */
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  height: 100%;              /* 👈 use full height instead of min-height */
+  overflow: hidden;          /* no outer scroll */
 }
 
 .carousel {
@@ -359,17 +390,6 @@ const totalFaculty = computed(() =>
   transition: transform 0.8s ease-in-out;
   width: 100%;
   height: 100%;
-}
-
-.carousel-slide {
-  flex: 0 0 100%;
-  min-height: 100vh; /* ✅ ensures the full slide is tall enough */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  box-sizing: border-box;
-  overflow-y: auto; /* ✅ lets timeline content extend and stay visible */
 }
 
 /* calculate slide translation */
@@ -467,6 +487,68 @@ const totalFaculty = computed(() =>
   align-items: center;
 }
 
+/* ===========================
+   🔹 ARTICLE TYPE LEGEND
+=========================== */
+.article-key {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Small colored box for each type */
+.color-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #d1d5db;
+}
+
+/* Match new timeline colors */
+.key-item.news .color-box {
+  background-color: #FF9E5F; /* News: orange */
+  border-color: #FF9E5F;
+}
+.key-item.blog .color-box {
+  background-color: #FFFF6C; /* Blog: yellow */
+  border-color: #FFFF6C;
+}
+.key-item.event .color-box {
+  background-color: #86FF81; /* Event: green */
+  border-color: #86FF81;
+}
+.key-item.conference .color-box {
+  background-color: #7DEDF6; /* Conference: light blue */
+  border-color: #7DEDF6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 700px) {
+  .article-key {
+    gap: 0.8rem 1rem;
+    font-size: 0.85rem;
+  }
+  .color-box {
+    width: 16px;
+    height: 16px;
+  }
+}
 
 /* ===========================
    🔹 ARTICLES SECTION
@@ -525,6 +607,12 @@ const totalFaculty = computed(() =>
 }
 .article-display a:hover {
   color: #F06C13;
+}
+.article-publication {
+  font-size: 0.95rem;
+  color: #333;
+  font-style: italic;
+  margin: 0.2rem 0 0.4rem;
 }
 
 /* ===========================
@@ -618,22 +706,33 @@ const totalFaculty = computed(() =>
 }
 
 .timeline-sidebar {
-  flex: 0 0 400px;          /* ⬅️ make timeline wider */
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 400px;
   max-height: 75vh;
-  overflow-y: auto;
+  overflow: hidden; /* ❌ stops outer scrollbar */
   border-right: 2px solid #e5e7eb;
   padding-right: 1.5rem;
-  transform: scale(0.95);   /* ⬇️ subtle zoom-out for more visible cards */
+  transform: scale(0.95);
   transform-origin: top left;
 }
 
-.timeline-sidebar::-webkit-scrollbar {
+/* Inner scroll container */
+.timeline-scroll-wrapper {
+  flex: 1;
+  overflow-y: auto; /* ✅ only this scrolls */
+  padding-right: 0.5rem;
+}
+
+/* Make sure scrollbar looks clean */
+.timeline-scroll-wrapper::-webkit-scrollbar {
   width: 8px;
 }
-.timeline-sidebar::-webkit-scrollbar-thumb {
+.timeline-scroll-wrapper::-webkit-scrollbar-thumb {
   background-color: #9ca3af;
   border-radius: 10px;
 }
+
 
 .article-display {
   flex: 1;

@@ -2,12 +2,16 @@
   <div class="timeline-container">
     <div class="timeline-scroll" ref="timeline">
       <div
-      v-for="(article, index) in props.articles"
-        :key="index"
-        class="timeline-card"
-        :class="{ active: index === currentArticleIndex }"
-        @click="$emit('select-article', index)"
-      >
+          v-for="(article, index) in props.articles"
+          :key="index"
+          class="timeline-card"
+          :class="[
+            article.type?.toLowerCase(),  // 👈 dynamically adds a class like 'news', 'blog', 'event', etc.
+            { active: index === currentArticleIndex }
+          ]"
+          @click="$emit('select-article', index)"
+        >
+
         <div class="timeline-dot"></div>
         <div class="timeline-content">
           <h3>{{ article.title }}</h3>
@@ -47,13 +51,9 @@ watch(
 .timeline-container {
   display: flex;
   justify-content: flex-start;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  padding: 0.75rem 0;  
+  overflow: visible; /* ✅ remove internal scroll */
+  padding: 0.75rem 0;
   width: 100%;
-  height: 100%;
-  max-height: 75vh;
-  margin: 0;
   box-sizing: border-box;
 }
 
@@ -65,16 +65,15 @@ watch(
 }
 
 /* ===========================
-   🔹 TIMELINE CARD
+   🔹 TIMELINE CARD BASE
 =========================== */
 .timeline-card {
-  flex: 1 1 auto;              /* ⬅️ cards grow to fill width */
-  width: 100%;                 /* ⬅️ fully responsive */
-  background: #ffffff;
+  flex: 1 1 auto;
+  width: 100%;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
   padding: 1rem;
-  text-align: left;            /* ⬅️ aligns better for wide cards */
+  text-align: left;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -82,24 +81,54 @@ watch(
   overflow-wrap: break-word;
 }
 
-.timeline-card:hover {
-  transform: translateY(-2px);
-  border-color: #2563eb;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+/* ===========================
+   🔹 CARD COLORS BY TYPE
+=========================== */
+
+/* 📰 News */
+.timeline-card.news {
+  background-color: #FF9E5F;
+  border-color: #FF9E5F;
 }
 
-.timeline-card.active {
-  background: #23A5E9;
-  color: #fff;
-  border-color: #2563eb;
-  box-shadow: 0 4px 12px rgba(35, 165, 233, 0.4);
+/* ✍️ Blog */
+.timeline-card.blog {
+  background-color: #FFFF6C;
+  border-color: #FFFF6C;
+}
+
+/* 🎟️ Event */
+.timeline-card.event {
+  background-color: #86FF81;
+  border-color: #86FF81;
+}
+
+/* 🧠 Conference */
+.timeline-card.conference {
+  background-color: #7DEDF6;
+  border-color: #7DEDF6;
+}
+
+/* Default (no type) */
+.timeline-card:not(.news):not(.blog):not(.event):not(.conference) {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
 }
 
 /* ===========================
-   🔹 DOT INDICATOR
+   🔹 HOVER + ACTIVE STATES
 =========================== */
-.timeline-dot {
-  display: none;
+.timeline-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Active: keep color, add glow */
+.timeline-card.active {
+  box-shadow: 0 0 15px rgba(35, 165, 233, 0.5);
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
 /* ===========================
@@ -121,31 +150,14 @@ watch(
 
 .timeline-content .publication {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: #333;
   font-style: italic;
   margin-top: 0.25rem;
 }
 
 .timeline-content .date {
   font-size: 0.8rem;
-  color: #6b7280;
-}
-
-.timeline-card.active .timeline-content h3,
-.timeline-card.active .timeline-content .publication,
-.timeline-card.active .timeline-content .date {
-  color: #ffffff;
-}
-
-/* ===========================
-   🔹 SCROLLBAR STYLE
-=========================== */
-.timeline-container::-webkit-scrollbar {
-  width: 8px;
-}
-.timeline-container::-webkit-scrollbar-thumb {
-  background-color: #9ca3af;
-  border-radius: 10px;
+  color: #444;
 }
 
 /* ===========================
@@ -159,6 +171,5 @@ watch(
     font-size: 0.9rem;
   }
 }
-
 </style>
 
