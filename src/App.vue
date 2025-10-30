@@ -584,9 +584,10 @@ const totalFaculty = computed(() =>
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 20px 40px 10px; 
+  padding: 10px 40px; /* less padding */
   box-sizing: border-box;
   flex-grow: 1;
+  margin-top: -40px; /* 👈 raises the section upward */
 }
 .article-display {
   text-align: center;
@@ -735,8 +736,8 @@ const totalFaculty = computed(() =>
   flex-direction: column;
   flex: 0 0 400px;
   max-height: 75vh;
-  overflow: hidden; /* ❌ stops outer scrollbar */
-  border-right: 2px solid #e5e7eb;
+  overflow: hidden; 
+  border-right: none;
   padding-right: 1.5rem;
   transform: scale(0.95);
   transform-origin: top left;
