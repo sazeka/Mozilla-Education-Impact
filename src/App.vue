@@ -78,55 +78,41 @@
         <!-- 📰 Slide 3: Articles + Timeline -->
         <div class="carousel-slide">
           <div class="articles-section">
+            <div class="articles-layout" v-if="sortedArticles.length">
+              <!-- 🕒 Timeline Sidebar -->
+              <div class="timeline-sidebar">
+                <ArticleTimeline
+                  :articles="sortedArticles"
+                  :currentArticleIndex="currentArticleIndex"
+                  @select-article="setCurrentArticle"
+                />
+              </div>
 
-            <!-- 📰 Article Display -->
-              <div class="article-display" v-if="sortedArticles.length">
+              <!-- 📰 Main Article Display -->
+              <div class="article-display">
                 <h3>{{ currentArticle.title }}</h3>
-
-              <!-- ✍️ Author -->
-              <p class="article-author" v-if="currentArticle.author">
-                By {{ currentArticle.author }}
-              </p>
-
-              <!-- 🗓️ Date -->
-              <p class="article-date">
-                {{
-                  new Date(currentArticle.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })
-                }}
-              </p>
-
-              <!-- 🧾 Summary -->
-              <p class="article-summary">
-                {{ currentArticle.summary }}
-              </p>
-
-              <!-- 🔗 Read more -->
-              <a
-                :href="currentArticle.link"
-                target="_blank"
-                rel="noopener"
-              >
-                Read more →
-              </a>
+                <p class="article-author" v-if="currentArticle.author">
+                  By {{ currentArticle.author }}
+                </p>
+                <p class="article-date">
+                  {{
+                    new Date(currentArticle.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })
+                  }}
+                </p>
+                <p class="article-summary">{{ currentArticle.summary }}</p>
+                <a
+                  :href="currentArticle.link"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Read more →
+                </a>
+              </div>
             </div>
-
-            <!-- 🕒 Timeline Centered Below -->
-            <div class="timeline-wrapper" v-if="sortedArticles.length">
-              <ArticleTimeline
-                :articles="sortedArticles"
-                :currentArticleIndex="currentArticleIndex"
-                @select-article="setCurrentArticle"
-              />
-            </div>
-            <!-- optional loading placeholder -->
-            <div class="timeline-wrapper" v-else>
-              <p>Loading timeline...</p>
-            </div>
-
           </div>
         </div>
       </div>
@@ -617,4 +603,48 @@ const totalFaculty = computed(() =>
   .video-section { padding: 20px; }
   .articles-section { padding: 20px; }
 }
+
+/* ===========================
+   🔹 ARTICLES SIDE-BY-SIDE LAYOUT (WIDER)
+=========================== */
+.articles-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 90vw;              /* ⬅️ use more of the screen width */
+  max-width: 1600px;        /* ⬅️ much wider than before */
+  gap: 3rem;                /* more breathing room between columns */
+  margin-top: 2rem;
+}
+
+.timeline-sidebar {
+  flex: 0 0 400px;          /* ⬅️ make timeline wider */
+  max-height: 75vh;
+  overflow-y: auto;
+  border-right: 2px solid #e5e7eb;
+  padding-right: 1.5rem;
+  transform: scale(0.95);   /* ⬇️ subtle zoom-out for more visible cards */
+  transform-origin: top left;
+}
+
+.timeline-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.timeline-sidebar::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+  border-radius: 10px;
+}
+
+.article-display {
+  flex: 1;
+  max-width: 900px;         /* ⬅️ allow article section to expand */
+  text-align: left;
+  padding-left: 1.5rem;
+}
+.article-display h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.6rem;
+}
+
+
 </style>
