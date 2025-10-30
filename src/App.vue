@@ -80,8 +80,8 @@
           <div class="articles-section">
 
             <!-- 📰 Article Display -->
-            <div class="article-display" v-if="articles.length">
-              <h3>{{ currentArticle.title }}</h3>
+              <div class="article-display" v-if="sortedArticles.length">
+                <h3>{{ currentArticle.title }}</h3>
 
               <!-- ✍️ Author -->
               <p class="article-author" v-if="currentArticle.author">
@@ -115,12 +115,16 @@
             </div>
 
             <!-- 🕒 Timeline Centered Below -->
-            <div class="timeline-wrapper">
+            <div class="timeline-wrapper" v-if="sortedArticles.length">
               <ArticleTimeline
-                :articles="articles"
+                :articles="sortedArticles"
                 :currentArticleIndex="currentArticleIndex"
                 @select-article="setCurrentArticle"
               />
+            </div>
+            <!-- optional loading placeholder -->
+            <div class="timeline-wrapper" v-else>
+              <p>Loading timeline...</p>
             </div>
 
           </div>
@@ -182,7 +186,16 @@ const selectedCategory = ref("");
 const selectedCountry = ref("");
 
 const currentArticleIndex = ref(0);
-const currentArticle = computed(() => articles.value[currentArticleIndex.value] || {});
+
+/* ✅ Sort articles chronologically (shared by display + timeline) */
+const sortedArticles = computed(() =>
+  [...articles.value].sort((a, b) => new Date(a.date) - new Date(b.date))
+);
+
+/* ✅ Use sorted list for the displayed article */
+const currentArticle = computed(
+  () => sortedArticles.value[currentArticleIndex.value] || {}
+);
 
 function setCurrentArticle(index) {
   currentArticleIndex.value = index;
@@ -208,9 +221,8 @@ const startAutoRotate = () => {
   clearInterval(intervalId);
   intervalId = setInterval(() => {
     if (!isPaused.value) nextSlide();
-  }, 10000); // rotates every 10s
+  }, 10000);
 };
-
 onUnmounted(() => clearInterval(intervalId));
 
 /* ────────────────
@@ -227,8 +239,6 @@ onMounted(async () => {
     const title = (a.title || "").trim();
     const author = (a.author || "").trim();
     const summaryRaw = (a.summary || "").trim();
-
-    // Remove duplicated title from start of summary
     const regex = new RegExp(`^${title}[\\s:–—-]*`, "i");
     const summary = summaryRaw.replace(regex, "").trim();
 
@@ -279,6 +289,7 @@ const totalFaculty = computed(() =>
   filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
 );
 </script>
+
 
 
 
@@ -360,12 +371,13 @@ const totalFaculty = computed(() =>
 
 .carousel-slide {
   flex: 0 0 100%;
-  height: 100%;
+  min-height: 100vh; /* ✅ ensures the full slide is tall enough */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
+  overflow-y: auto; /* ✅ lets timeline content extend and stay visible */
 }
 
 /* calculate slide translation */
@@ -475,6 +487,7 @@ const totalFaculty = computed(() =>
   width: 100%;
   padding: 40px;
   box-sizing: border-box;
+  flex-grow: 1; 
 }
 .article-display {
   text-align: center;

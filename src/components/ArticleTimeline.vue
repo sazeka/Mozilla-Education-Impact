@@ -2,7 +2,7 @@
   <div class="timeline-container">
     <div class="timeline-scroll" ref="timeline">
       <div
-        v-for="(article, index) in sortedArticles"
+      v-for="(article, index) in props.articles"
         :key="index"
         class="timeline-card"
         :class="{ active: index === currentArticleIndex }"
@@ -25,10 +25,6 @@ const props = defineProps({
   articles: { type: Array, required: true },
   currentArticleIndex: { type: Number, default: 0 },
 });
-
-const sortedArticles = computed(() =>
-  [...props.articles].sort((a, b) => new Date(a.date) - new Date(b.date))
-);
 
 const timeline = ref(null);
 
