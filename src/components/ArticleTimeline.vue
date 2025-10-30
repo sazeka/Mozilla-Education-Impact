@@ -109,8 +109,14 @@ watch(
   border-color: #7DEDF6;
 }
 
+/* 🧠 Journal */
+.timeline-card.journal {
+  background-color: #F7F7F7;
+  border-color: #F7F7F7;
+}
+
 /* Default (no type) */
-.timeline-card:not(.news):not(.blog):not(.event):not(.conference) {
+.timeline-card:not(.news):not(.blog):not(.event):not(.conference):not(.journal) {
   background-color: #f9fafb;
   border-color: #e5e7eb;
 }

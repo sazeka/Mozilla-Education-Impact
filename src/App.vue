@@ -185,6 +185,7 @@ const articleTypes = [
   { value: "blog", label: "Blogs" },
   { value: "event", label: "Events" },
   { value: "conference", label: "Conferences" },
+  { value: "journal", label: "Journals" },
 ];
 
 // 🔹 Toggle filter function
@@ -272,7 +273,7 @@ onMounted(async () => {
   // ✅ Normalize and fix the type
   let cleanType = (a.type || "").trim().toLowerCase();
   if (cleanType === "confrence") cleanType = "conference"; // fix typo
-  if (cleanType === "event" || cleanType === "news" || cleanType === "blog" || cleanType === "conference") {
+  if (cleanType === "event" || cleanType === "news" || cleanType === "blog" || cleanType === "conference"|| cleanType === "journal") {
     // valid
   } else {
     cleanType = ""; // fallback if CSV had junk
