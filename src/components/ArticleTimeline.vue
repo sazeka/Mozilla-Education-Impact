@@ -11,6 +11,7 @@
         <div class="timeline-dot"></div>
         <div class="timeline-content">
           <h3>{{ article.title }}</h3>
+          <p v-if="article.publication" class="publication">{{ article.publication }}</p>
           <p class="date">{{ new Date(article.date).toLocaleDateString() }}</p>
         </div>
       </div>
@@ -76,6 +77,16 @@ watch(
   gap: 1rem;
   justify-content: center;
   flex-wrap: nowrap;
+}
+
+.timeline-content .publication {
+  font-size: 0.75rem;
+  color: #4b5563;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+.timeline-card.active .timeline-content .publication {
+  color: #ffffff;
 }
 
 /* ===========================

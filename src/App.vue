@@ -236,20 +236,21 @@ onMounted(async () => {
   const rawArticles = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
 
   articles.value = rawArticles.map((a) => {
-    const title = (a.title || "").trim();
-    const author = (a.author || "").trim();
-    const summaryRaw = (a.summary || "").trim();
-    const regex = new RegExp(`^${title}[\\s:–—-]*`, "i");
-    const summary = summaryRaw.replace(regex, "").trim();
+  const title = (a.title || "").trim();
+  const author = (a.author || "").trim();
+  const summaryRaw = (a.summary || "").trim();
+  const regex = new RegExp(`^${title}[\\s:–—-]*`, "i");
+  const summary = summaryRaw.replace(regex, "").trim();
 
-    return {
-      title,
-      author,
-      date: a.date,
-      summary,
-      link: a.link,
-    };
-  });
+  return {
+    title,
+    author,
+    date: a.date,
+    summary,
+    link: a.link,
+    publication: a.publication?.trim() || "", // ✅ renamed
+  };
+});
 
   startAutoRotate();
 });
@@ -282,11 +283,16 @@ const filteredPoints = computed(() =>
 );
 
 const totalStudents = computed(() =>
-  filteredPoints.value.reduce((sum, p) => sum + (p.students || 0), 0)
+  filteredPoints.value.reduce(
+    (sum, p) => sum + (parseInt(p.students) || 0),
+    0
+  )
 );
-
 const totalFaculty = computed(() =>
-  filteredPoints.value.reduce((sum, p) => sum + (p.faculty || 0), 0)
+  filteredPoints.value.reduce(
+    (sum, p) => sum + (parseInt(p.faculty) || 0),
+    0
+  )
 );
 </script>
 
@@ -485,14 +491,16 @@ const totalFaculty = computed(() =>
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 40px;
+  padding: 20px 40px 10px; 
   box-sizing: border-box;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 .article-display {
   text-align: center;
   max-width: 700px;
-  margin: 0 auto;
+  margin: -40px auto 0; 
+  position: relative;
+  z-index: 2;
 }
 .article-display h3 {
   font-size: 1.5rem;
