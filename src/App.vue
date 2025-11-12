@@ -107,29 +107,24 @@
 
 
               <!-- 📰 Main Article Display -->
-              <div class="article-display">
+              <div class="article-display" v-if="hasArticle">
                 <h3>{{ currentArticle.title }}</h3>
+
                 <p class="article-author" v-if="currentArticle.author">
                   By {{ currentArticle.author }}
                 </p>
+
                 <p class="article-publication" v-if="currentArticle.publication">
                   Published in {{ currentArticle.publication }}
                 </p>
-                <p class="article-date">
-                  {{
-                    new Date(currentArticle.date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })
-                  }}
+
+                <p class="article-date" v-if="formattedDate">{{ formattedDate }}</p>
+
+                <p class="article-summary" v-if="currentArticle.summary">
+                  {{ currentArticle.summary }}
                 </p>
-                <p class="article-summary">{{ currentArticle.summary }}</p>
-                <a
-                  :href="currentArticle.link"
-                  target="_blank"
-                  rel="noopener"
-                >
+
+                <a v-if="currentArticle.link" :href="currentArticle.link" target="_blank" rel="noopener">
                   Read more →
                 </a>
               </div>
@@ -170,7 +165,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import InteractiveGlobe from "./components/InteractiveGlobe.vue";
 import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
@@ -187,12 +182,6 @@ const articleTypes = [
   { value: "conference", label: "Conferences" },
   { value: "journal", label: "Journals" },
 ];
-
-// 🔹 Toggle filter function
-function toggleTypeFilter(type) {
-  selectedType.value = selectedType.value === type ? "" : type;
-}
-
 
 /* ────────────────
    Reactive State
@@ -220,13 +209,38 @@ const sortedArticles = computed(() => {
 });
 
 
-/* ✅ Use sorted list for the displayed article */
-const currentArticle = computed(
-  () => sortedArticles.value[currentArticleIndex.value] || {}
+const hasArticle = computed(() => sortedArticles.value.length > 0);
+
+const currentArticle = computed(() =>
+  hasArticle.value ? sortedArticles.value[currentArticleIndex.value] : null
 );
 
+const formattedDate = computed(() => {
+  const d = currentArticle.value?.date;
+  const dt = d ? new Date(d) : null;
+  return dt && !isNaN(dt) 
+    ? dt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+    : "";
+});
+
 function setCurrentArticle(index) {
-  currentArticleIndex.value = index;
+  const max = Math.max(0, sortedArticles.value.length - 1);
+  currentArticleIndex.value = Math.min(Math.max(0, index), max);
+}
+
+// Reset to the first item any time the filtered list changes
+watch(sortedArticles, (list) => {
+  if (list.length === 0) {
+    currentArticleIndex.value = 0; // harmless; template will hide the panel
+  } else if (currentArticleIndex.value >= list.length) {
+    currentArticleIndex.value = 0;
+  }
+});
+
+// Also reset when toggling the type chip
+function toggleTypeFilter(type) {
+  selectedType.value = selectedType.value === type ? "" : type;
+  currentArticleIndex.value = 0;
 }
 
 /* ────────────────
