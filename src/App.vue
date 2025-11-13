@@ -22,10 +22,49 @@
 
         <!-- 🌍 Slide 1: Globe + Filters + Totals -->
         <div class="carousel-slide">
-          <div class="globe-section">
-            <InteractiveGlobe :points="filteredPoints" />
-          </div>
+          <div class="globe-layout">
+            <!-- 🌍 Globe -->
+            <div class="globe-section">
+              <InteractiveGlobe :points="displayPoints" />
+            </div>
 
+            <!-- 🏫 University List -->
+            <aside class="university-panel">
+              <div class="panel-header">
+                <span>Universities ({{ universities.length }})</span>
+                <button
+                  v-if="selectedUniversity"
+                  class="clear-btn"
+                  @click="selectedUniversity = ''"
+                  title="Clear selection"
+                >
+                  Clear
+                </button>
+              </div>
+
+              <input
+                v-model="uniQuery"
+                class="uni-search"
+                type="search"
+                placeholder="Search university…"
+                aria-label="Search university"
+              />
+
+              <ul class="uni-list">
+                <li
+                  v-for="u in visibleUniversities"
+                  :key="u.name"
+                  class="uni-item"
+                  :class="{ active: u.name === selectedUniversity }"
+                  @click="selectedUniversity = (u.name === selectedUniversity ? '' : u.name)"
+                  title="Click to filter the globe"
+                >
+                  <span class="uni-name">{{ u.name }}</span>
+                  <span class="uni-count" v-if="u.count > 1">{{ u.count }}</span>
+                </li>
+              </ul>
+            </aside>
+          </div>
           <!-- 🔹 Filters Section -->
           <div class="filters-section">
             <div class="filter-bar">
@@ -171,43 +210,131 @@ import VideoCarousel from "@/components/VideoCarousel.vue";
 import { loadCSV } from "@/utils/loadCSV.js";
 import ArticleTimeline from "@/components/ArticleTimeline.vue";
 
-// 🔹 Article type filter
-const selectedType = ref(""); // none selected by default
-
-// 🔹 Available article types for the key
-const articleTypes = [
-  { value: "news", label: "News" },
-  { value: "blog", label: "Blogs" },
-  { value: "event", label: "Events" },
-  { value: "conference", label: "Conferences" },
-  { value: "journal", label: "Journals" },
-];
-
 /* ────────────────
-   Reactive State
+   Carousel / Slides
 ──────────────── */
 const currentSlide = ref(0);
 const totalSlides = 3;
 const isPaused = ref(false);
 let intervalId = null;
 
+const nextSlide = () => { currentSlide.value = (currentSlide.value + 1) % totalSlides; };
+const prevSlide = () => { currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides; };
+const togglePause = () => { isPaused.value = !isPaused.value; };
+
+const startAutoRotate = () => {
+  clearInterval(intervalId);
+  intervalId = setInterval(() => { if (!isPaused.value) nextSlide(); }, 10000);
+};
+onUnmounted(() => clearInterval(intervalId));
+
 /* ────────────────
-   Data
+   Data / State
 ──────────────── */
-const points = ref([]);
-const articles = ref([]);
+const points = ref([]);          // universities
+const articles = ref([]);        // articles
+
+// Filters + list state
 const selectedCategory = ref("");
-const selectedCountry = ref("");
+const selectedCountry  = ref("");
+const selectedUniversity = ref("");
+const uniQuery = ref("");
+
+// Articles state
+const selectedType = ref(""); // "", "news", "blog", "event", "conference", "journal"
 const currentArticleIndex = ref(0);
 
-const sortedArticles = computed(() => {
-  let list = [...articles.value].sort((a, b) => new Date(b.date) - new Date(a.date));
-  if (selectedType.value) {
-    list = list.filter(a => a.type === selectedType.value);
+const articleTypes = [
+  { value: "news",       label: "News" },
+  { value: "blog",       label: "Blogs" },
+  { value: "event",      label: "Events" },
+  { value: "conference", label: "Conferences" },
+  { value: "journal",    label: "Journals" },
+];
+
+/* ────────────────
+   Filters + Totals (declare BEFORE anything that uses them)
+──────────────── */
+const uniqueCategories = computed(() =>
+  [...new Set(points.value.map(p => p.category).filter(Boolean))]
+);
+
+const uniqueCountries = computed(() =>
+  [...new Set(
+    points.value
+      .map(p => (p.country && p.country.trim?.()) || (p.Country && p.Country.trim?.()) || "")
+      .filter(Boolean)
+  )]
+);
+
+const filteredPoints = computed(() =>
+  points.value.filter(p => {
+    const matchCategory = selectedCategory.value ? p.category === selectedCategory.value : true;
+    const matchCountry  = selectedCountry.value  ? p.country  === selectedCountry.value  : true;
+    return matchCategory && matchCountry;
+  })
+);
+
+const totalStudents = computed(() =>
+  filteredPoints.value.reduce((sum, p) => sum + (parseInt(p.students) || 0), 0)
+);
+const totalFaculty = computed(() =>
+  filteredPoints.value.reduce((sum, p) => sum + (parseInt(p.faculty) || 0), 0)
+);
+
+/* ────────────────
+   University list (depends on filteredPoints)
+──────────────── */
+function getUniName(p) {
+  return (
+    p.university || p.University || p.name || p.Name || p.institution || p.school || ""
+  ).toString().trim();
+}
+
+const universities = computed(() => {
+  const counts = new Map();
+  for (const p of filteredPoints.value) {
+    const name = getUniName(p);
+    if (!name) continue;
+    counts.set(name, (counts.get(name) || 0) + 1);
   }
-  return list;
+  return [...counts.entries()]
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 });
 
+const visibleUniversities = computed(() => {
+  const q = uniQuery.value.trim().toLowerCase();
+  if (!q) return universities.value;
+  return universities.value.filter(u => u.name.toLowerCase().includes(q));
+});
+
+// Points sent to the globe (apply university selection on top of other filters)
+const displayPoints = computed(() => {
+  if (!selectedUniversity.value) return filteredPoints.value;
+  return filteredPoints.value.filter(p => getUniName(p) === selectedUniversity.value);
+});
+
+// Clear selection if current filters remove it
+watch(filteredPoints, () => {
+  if (
+    selectedUniversity.value &&
+    !filteredPoints.value.some(p => getUniName(p) === selectedUniversity.value)
+  ) {
+    selectedUniversity.value = "";
+  }
+});
+
+/* ────────────────
+   Articles + Timeline
+──────────────── */
+const sortedArticles = computed(() => {
+  let list = [...articles.value].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  if (selectedType.value) list = list.filter(a => a.type === selectedType.value);
+  return list;
+});
 
 const hasArticle = computed(() => sortedArticles.value.length > 0);
 
@@ -218,7 +345,7 @@ const currentArticle = computed(() =>
 const formattedDate = computed(() => {
   const d = currentArticle.value?.date;
   const dt = d ? new Date(d) : null;
-  return dt && !isNaN(dt) 
+  return dt && !Number.isNaN(dt.getTime())
     ? dt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : "";
 });
@@ -228,126 +355,50 @@ function setCurrentArticle(index) {
   currentArticleIndex.value = Math.min(Math.max(0, index), max);
 }
 
-// Reset to the first item any time the filtered list changes
 watch(sortedArticles, (list) => {
-  if (list.length === 0) {
-    currentArticleIndex.value = 0; // harmless; template will hide the panel
-  } else if (currentArticleIndex.value >= list.length) {
-    currentArticleIndex.value = 0;
-  }
+  if (list.length === 0) currentArticleIndex.value = 0;
+  else if (currentArticleIndex.value >= list.length) currentArticleIndex.value = 0;
 });
 
-// Also reset when toggling the type chip
 function toggleTypeFilter(type) {
-  selectedType.value = selectedType.value === type ? "" : type;
+  selectedType.value = (selectedType.value === type ? "" : type);
   currentArticleIndex.value = 0;
 }
-
-/* ────────────────
-   Navigation
-──────────────── */
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % totalSlides;
-};
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides;
-};
-const togglePause = () => {
-  isPaused.value = !isPaused.value;
-};
-
-/* ────────────────
-   Auto-Rotation
-──────────────── */
-const startAutoRotate = () => {
-  clearInterval(intervalId);
-  intervalId = setInterval(() => {
-    if (!isPaused.value) nextSlide();
-  }, 10000);
-};
-onUnmounted(() => clearInterval(intervalId));
 
 /* ────────────────
    CSV Loading + Cleaning
 ──────────────── */
 onMounted(async () => {
-  // 🗺️ Load university data
+  // 🗺️ Universities
   points.value = await loadCSV("/Mozilla-Education-Impact/data/universities.csv");
 
-  // 📰 Load and clean article data
+  // 📰 Articles
   const rawArticles = await loadCSV("/Mozilla-Education-Impact/data/articles.csv");
+  articles.value = rawArticles.map(a => {
+    const title = (a.title || "").trim();
+    const author = (a.author || "").trim();
+    const summaryRaw = (a.summary || "").trim();
+    const regex = new RegExp(`^${title}[\\s:–—-]*`, "i");
+    const summary = summaryRaw.replace(regex, "").trim();
 
-  articles.value = rawArticles.map((a) => {
-  const title = (a.title || "").trim();
-  const author = (a.author || "").trim();
-  const summaryRaw = (a.summary || "").trim();
-  const regex = new RegExp(`^${title}[\\s:–—-]*`, "i");
-  const summary = summaryRaw.replace(regex, "").trim();
-  
-  // ✅ Normalize and fix the type
-  let cleanType = (a.type || "").trim().toLowerCase();
-  if (cleanType === "confrence") cleanType = "conference"; // fix typo
-  if (cleanType === "event" || cleanType === "news" || cleanType === "blog" || cleanType === "conference"|| cleanType === "journal") {
-    // valid
-  } else {
-    cleanType = ""; // fallback if CSV had junk
-  }
+    let cleanType = (a.type || "").trim().toLowerCase();
+    if (cleanType === "confrence") cleanType = "conference";
+    if (!["event","news","blog","conference","journal"].includes(cleanType)) cleanType = "";
 
-  return {
-    title,
-    author,
-    date: a.date,
-    summary,
-    link: a.link,
-    publication: a.publication?.trim() || "",
-    type: cleanType,
-  };
-});
+    return {
+      title,
+      author,
+      date: a.date,
+      summary,
+      link: a.link,
+      publication: a.publication?.trim() || "",
+      type: cleanType,
+    };
+  });
 
   startAutoRotate();
 });
-
-/* ────────────────
-   Filters + Totals
-──────────────── */
-const uniqueCategories = computed(() =>
-  [...new Set(points.value.map((p) => p.category).filter(Boolean))]
-);
-
-const uniqueCountries = computed(() =>
-  [...new Set(
-    points.value
-      .map((p) => p.country?.trim() || p.Country?.trim() || "")
-      .filter(Boolean)
-  )]
-);
-
-const filteredPoints = computed(() =>
-  points.value.filter((p) => {
-    const matchCategory = selectedCategory.value
-      ? p.category === selectedCategory.value
-      : true;
-    const matchCountry = selectedCountry.value
-      ? p.country === selectedCountry.value
-      : true;
-    return matchCategory && matchCountry;
-  })
-);
-
-const totalStudents = computed(() =>
-  filteredPoints.value.reduce(
-    (sum, p) => sum + (parseInt(p.students) || 0),
-    0
-  )
-);
-const totalFaculty = computed(() =>
-  filteredPoints.value.reduce(
-    (sum, p) => sum + (parseInt(p.faculty) || 0),
-    0
-  )
-);
 </script>
-
 
 
 
@@ -408,6 +459,105 @@ const totalFaculty = computed(() =>
 .page-title + .page-title {
   margin-top: -0.2rem;
 }
+
+/* Layout to place list at the right of the globe */
+.globe-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px; /* globe | list */
+  gap: 1.5rem;
+  align-items: start;
+  width: min(1200px, 92vw);
+  margin: 0 auto;
+}
+
+/* Panel */
+.university-panel {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0.75rem;
+  max-height: 400px;
+  overflow: hidden; /* header + search fixed, list scrolls */
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.clear-btn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+.clear-btn:hover { background: #e5e7eb; }
+
+/* Search */
+.uni-search {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  outline: none;
+}
+.uni-search:focus { border-color: #9ca3af; }
+
+/* List */
+.uni-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+.uni-list::-webkit-scrollbar { width: 8px; }
+.uni-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1; border-radius: 8px;
+}
+
+.uni-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px dashed #e5e7eb;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.uni-item:hover { background: #eef2ff; transform: translateX(2px); }
+
+.uni-item.active {
+  background: #e0e7ff;
+  outline: 2px solid #c7d2fe;
+}
+
+.uni-name { font-size: 0.95rem; line-height: 1.2; }
+.uni-count {
+  font-size: 0.8rem;
+  background: #111827; color: #fff;
+  padding: 0.1rem 0.4rem; border-radius: 999px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .globe-layout {
+    grid-template-columns: 1fr;
+  }
+  .university-panel {
+    max-height: 260px;
+  }
+}
+
 
 /* ===========================
    🔹 CAROUSEL CORE
